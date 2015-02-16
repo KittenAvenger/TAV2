@@ -41,5 +41,24 @@ public class TestConnection {
 		
 		assertTrue(server.isStopped());
 	}
+	
+	@Test
+	public void testMultipleConnection(){
+		Server server = new Server();
+		new Thread(server).start();
+		
+		Client client = new Client();
+		
+		
+		try {
+			client.connect();
+			client.connect();
+		    Thread.sleep(700);
+		} catch (InterruptedException e) {
+		    e.printStackTrace();
+		}
+		
+		assertTrue(server.idExists);
+	}
 
 }
