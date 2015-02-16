@@ -13,6 +13,7 @@ public class Server implements Runnable
 	String str;
 	String text = "<Accepted connection from  1234 +/>";
 	ServerSocket serverSocket = null;
+	boolean isStopped = false;
 
 	public void run() 
 	{
@@ -44,7 +45,7 @@ public class Server implements Runnable
 	}
 	
 	public synchronized void stop(){
-        
+        this.isStopped = true;
         try {
             this.serverSocket.close();
 //            System.out.println("Server has been stopped");
@@ -52,6 +53,11 @@ public class Server implements Runnable
             throw new RuntimeException("Error closing server", e);
         }
     }
+	
+	public synchronized boolean isStopped(){
+		
+		return isStopped;
+	}
 	
 
 }
