@@ -21,39 +21,40 @@ public class Connection implements Runnable{
         try {
         	
         	PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
+		BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
 		    
-			str = in.readLine();
+		str = in.readLine();
 				
-			if (existsID(str)==true){
-				Parser parse= new Parser();
+		if (existsID(str)==true){
+			Parser parse= new Parser();
 		    	String ID = parse.parseRequest(str);
-				out.write("<Accepted connection from '"+ID+"'");
-				out.close();
-	            in.close();
-	            System.out.println("Request processed");
-			}
-			else{
-				System.out.println("Connection denied");
-			}
+			out.write("<Accepted connection from '"+ID+"'");
+			out.close();
+	            	in.close();
+	            	System.out.println("Request processed");
+		}
+		else{
+			System.out.println("Connection denied");
+		}
 
            
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
     
     
     public boolean existsID(String request){
-		Parser parse= new Parser();
+	Parser parse= new Parser();
     	String ID = parse.parseRequest(request);
 		
-	    for(int i = 0; i < Server.ProcessIDList.size(); i++){
-			if(Server.ProcessIDList.get(i).equals(ID)){
-				return true;
-			}
-			
+	for(int i = 0; i < Server.ProcessIDList.size(); i++){
+		if(Server.ProcessIDList.get(i).equals(ID)){
+			return true;
 		}
-	   return false;        
+			
 	}
+	return false;        
+    }
 }
