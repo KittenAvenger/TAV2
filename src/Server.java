@@ -30,16 +30,9 @@ public class Server implements Runnable
 	public void run() 
 	{
 		start();
-		
-			
-		
-		while(true)
-		{
-			
+		while(true){	
 		try 
-		{
-			
-			    
+		{    
 			clientSocket = serverSocket.accept();
 			    
 			    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -47,23 +40,16 @@ public class Server implements Runnable
 			    
 			    out.println(text + "\n");
 			    
-			    while ((str = in.readLine()) != null && !str.isEmpty()) 
-			    {
+			    while ((str = in.readLine()) != null && !str.isEmpty())  {
 			        System.out.println("From client: " + str);	
 			        checkID(str);			     
-			    }
-			    
-			    
-			    
+			    }   
 		}
 		
-		catch (Exception e)
-		{
+		catch (Exception e){
 			e.printStackTrace();
 		}
-		
-		}
-		
+	}
 	}
 	
 	public void checkID(String request){
@@ -80,15 +66,11 @@ public class Server implements Runnable
 			}
 			
 		}
-	    
 	   
-	    
-	    if(!idExists)
-	    {
+	    if(!idExists){
 	    	ProcessIDList.add(ID);
 	    }
-	    else if(idExists == true)
-	    {
+	    else if(idExists == true){
 	    	idExists = false;
 	    }
 	}
@@ -107,6 +89,4 @@ public class Server implements Runnable
 		
 		return isStopped;
 	}
-	
-
 }
