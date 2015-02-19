@@ -1,7 +1,4 @@
-
-
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class Kernel implements WhatsUpGU {
@@ -10,13 +7,14 @@ public class Kernel implements WhatsUpGU {
 	static ArrayList <Message> server = new ArrayList<Message>();
 	static ArrayList <Integer> IDS = new ArrayList<Integer>();
 	
+	
 	public Kernel (){
 		
-		
+			
 	}
 	
-	
-	public Message returnServer (){
+	// test
+	public Message returnMessage (){
 		
 		return text;
 	}
@@ -31,7 +29,7 @@ public class Kernel implements WhatsUpGU {
 	
 	public int add(String message, String sender, String recipient) {
 		int ID;
-		Random rand = new Random();
+		
 		
 		
 		if(sender.length() != 10 || recipient.length() != 10)
@@ -47,20 +45,12 @@ public class Kernel implements WhatsUpGU {
 		if(IsNotEmpty(message))
 		{
 			
-			ID = rand.nextInt(10000) + 1;
-			System.out.println(ID);
-			if(IDS.contains(ID))
+			ID = IDS.size() + 1;
+			
+			
+			if(IDS.size()> 10000)
 			{
-				int i = 0;
-				while(IDS.contains(ID) && i < 1)
-				{
-					ID = rand.nextInt(10000) + 1;
-					i++;
-				}
-				
-				if(IDS.contains(ID)){
-					return -1;
-				}
+				return -1;
 				
 			}
 			
@@ -85,7 +75,7 @@ public class Kernel implements WhatsUpGU {
 		for(int i=0; i<server.size(); i++) {
 			if (server.get(i).getID() == ID && server.get(i).isFetched() == false) {
 				
-				System.out.println(ID);
+				//System.out.println(ID);
 				
 				server.remove(server.get(i));
 				IDS.remove(i);
@@ -103,6 +93,7 @@ public class Kernel implements WhatsUpGU {
 				server.get(i).setMessage(message);
 				return server.get(i).getID();
 			}
+			
 		}
 		return -1;
 	}
@@ -136,6 +127,7 @@ public class Kernel implements WhatsUpGU {
 		}	
 	}
 	
+	
 	public int fetch_complete(String receiver) {
 		
 		int count = 0;
@@ -144,7 +136,6 @@ public class Kernel implements WhatsUpGU {
 			if (server.get(i).getReceiver().equals(receiver) && server.get(i).isFetched() == true){
 				server.remove(i);
 				count++;
-				//server.remove(i);
 				IDS.remove(i);
 			}
 		}

@@ -10,7 +10,8 @@ public class Connection implements Runnable{
     Socket clientSocket = null;
     String input;
     String text = "<Accepted connection from  1234 +/>";
-    String sender;
+    String sender, test;
+    int result = 0;
 
     public Connection(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -51,32 +52,47 @@ public class Connection implements Runnable{
 			 		        System.out.println("From client: " + input);
 			 		        break;
 			        	 }
-			        	String operation = input.split("[\"]")[0];
-			        	System.out.println(operation);
+			        	 
+			        	 if(input.length() == 0){
+			        		 
+			        	 }
+			        	 else{
+			        	 test = parse(input);
+		        	 
+//			        	 for (int i = 0; i < tokens.length; i++){
+//			        		 //System.out.println(tokens[i] + " kaki");
+//			        	 }
+//			        	System.out.println(operation + " kdjfkajdkf");
 			        	Parser parser= new Parser();
 			        	Kernel karn = new Kernel();
 			        	
-			        	
-			        	switch(operation){
-			            	case "<AddMessage>":
+			        	System.out.println(test);
+			        	switch(test){
+			            	case "AddMessage":
 			            		
 			            		
 			            		String message ="";
-			            		String sender ="";
+			            		String sender ="1234567890";
 			            		String recipent ="";
 			            		recipent = parser.parseID(input);
+			            		
 			            		message = parser.parseAdd(input);
-			            		int result = karn.add(message, sender, recipent);
+			            		System.out.println(message);
+			            		this.result = karn.add(message, sender, recipent);
 			            		if(result==-1){
 			            			System.out.println("<ErrorMsg> Reason </ErrorMsg>");
+			            			out.println("<ErrorMsg> Reason </ErrorMsg>");
+			            			break;
 			            		}
 			            		else{
-			            			System.out.println("<Message added: '"+result+"' />");
+			            			//System.out.println("<Message added: '"+result+"' />");
+			            			out.println("<Message added: '" + result + "' />");
+			            			break;
 			            		}
 			            		
 			            		
-			            		out.println("message added " + result);
-			            		break;
+			            		
+			            		
 			            	
 //			            	case "<DelMessage>":
 //			            		
@@ -95,7 +111,10 @@ public class Connection implements Runnable{
 			       
 			            	
 			            }
-			        }
+			        	
+			        	 } 
+			        	 
+			         }
 				}
 		    }    
         } 
@@ -118,4 +137,12 @@ public class Connection implements Runnable{
 	}
 	return true;        
     }
+    
+    public synchronized String parse(String msg ){
+    	String pattern = "[<>]";
+   	 String[] tokens = input.split(pattern);
+	 return tokens[1];
+    }
+    
+    
 }

@@ -32,7 +32,7 @@ public class Client {
 		    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
 
 		    
-		    out.println("<Request connection  1234 +/>" + "\n");
+		    out.println("<Request connection  1234567890 +/>" + "\n");
 		
 
 		    while ((str = in.readLine()) != null && !str.isEmpty()) {
@@ -52,7 +52,7 @@ public class Client {
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 	    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
 	    
-	    out.println("<AddMessage> <Receiver \"ID\" /> <Content \"This is my message's.\" /> </AddMessage>");
+	    out.println("<AddMessage> <Receiver \"1234567890\" /> <Content \"This is my message's.\" /> </AddMessage>");
 	    
 	    while ((str = in.readLine()) != null && !str.isEmpty()) {
 	    	 

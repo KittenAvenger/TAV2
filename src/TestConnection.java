@@ -78,12 +78,22 @@ public class TestConnection {
 		try {
 		message = client.connect();
 		add = client.addMessage();
+		
 		    Thread.sleep(1000);
 		} catch (InterruptedException | IOException e) {
 		    e.printStackTrace();
 		}
 		server.stop();
-		assertEquals("<Message added: '4567' />", add );
+		String pattern = "[^\\d]*";
+		String idD = add.replaceAll(pattern, "");
+		System.out.println(idD);
+		
+//		String[] tokens = add.split(pattern);
+//		
+//		for (int i = 0; i < tokens.length; i++)
+//	    System.out.println(tokens[i] + "ffffff");
+		
+		assertEquals("<Message added: '" +idD +"' />", add );
 	}
 
 }
