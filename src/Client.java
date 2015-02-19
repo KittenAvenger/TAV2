@@ -13,12 +13,12 @@ public class Client {
 	String str, test;
 	int i = 0;
 	Scanner scan = new Scanner(System.in);
-	//Socket conn = null;
+	Socket conn = null;
 	
 
 	public String connect(){
 		try {
-			Socket conn = new Socket (InetAddress.getLocalHost(), 4444);
+			 conn = new Socket (InetAddress.getLocalHost(), 4444);
 			 
 		    PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));

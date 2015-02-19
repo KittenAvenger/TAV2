@@ -3,9 +3,9 @@ public class Parser {
 
 	public String parseRequest (String message) {
 		
-		String delims = "[\\\" ]+";
+		String delims = "[ ]+";
 		String[] tokens = message.split(delims);
-		
+		System.out.println(tokens[2]);
 		return tokens[3];
 	}
 	

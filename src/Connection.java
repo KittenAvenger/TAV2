@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
-
- */
 public class Connection implements Runnable{
 
     Socket clientSocket = null;
     String str;
+    String text = "<Accepted connection from  1234 +/>";
 
     public Connection(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -22,25 +20,34 @@ public class Connection implements Runnable{
         	
         	PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
+		out.println(text + "\n");
 		    
-		str = in.readLine();
+		
+		 Parser parse= new Parser();
+		 while ((str = in.readLine()) != null && !str.isEmpty())  {
+		        System.out.println("From client: " + str);	
+		        
+		       
 				
-		if (existsID(str)==true){
-			Parser parse= new Parser();
 		    	String ID = parse.parseRequest(str);
-			out.write("<Accepted connection from '"+ID+"'");
-			out.close();
-	            	in.close();
-	            	System.out.println("Request processed");
-		}
-		else{
-			System.out.println("Connection denied");
-		}
+		        if (existsID(ID)==true){
+					
+					out.write("<Accepted connection from '"+ID+"'");
+					out.close();
+			            	in.close();
+			            	System.out.println("Request processed");
+				}
+				else{
+					System.out.println("Connection denied");
+				}
+		    }   
+		
+		
 
            
         } 
         catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     
@@ -51,10 +58,10 @@ public class Connection implements Runnable{
 		
 	for(int i = 0; i < Server.ProcessIDList.size(); i++){
 		if(Server.ProcessIDList.get(i).equals(ID)){
-			return true;
+			return false;
 		}
 			
 	}
-	return false;        
+	return true;        
     }
 }

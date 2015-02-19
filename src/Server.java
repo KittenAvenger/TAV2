@@ -15,7 +15,7 @@ public class Server implements Runnable
 	String text = "<Accepted connection from  1234 +/>";
 	ServerSocket serverSocket = null;
 	boolean isStopped = false, idExists = false;
-	ArrayList <String> ProcessIDList = new ArrayList<String>();
+	static ArrayList <String> ProcessIDList = new ArrayList<String>();
 	Parser parse = new Parser();
 	Socket clientSocket = null;
 
@@ -30,20 +30,28 @@ public class Server implements Runnable
 	public void run() 
 	{
 		start();
+		try {
+			clientSocket = serverSocket.accept();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		while(true){	
 		try 
 		{    
-			clientSocket = serverSocket.accept();
+			
 			    
-			    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			    BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
-			    
-			    out.println(text + "\n");
-			    
-			    while ((str = in.readLine()) != null && !str.isEmpty())  {
-			        System.out.println("From client: " + str);	
-			        checkID(str);			     
-			    }   
+//			    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+//			    BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
+//			    
+//			    out.println(text + "\n");
+			    new Thread(
+			            new Connection(
+			            clientSocket)
+			            ).start();
+//			    while ((str = in.readLine()) != null && !str.isEmpty())  {
+//			        System.out.println("From client: " + str);		
+//			        checkID(str);			     
+//			    }   
 		}
 		
 		catch (Exception e){
