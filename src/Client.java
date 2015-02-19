@@ -39,7 +39,7 @@ public class Client {
 			      System.out.println("From server: " + str);
 			      break;
 			    }
-		    System.out.println("Shit didn't work");
+		    //System.out.println("Shit didn't work");
 		    
 			
 		} catch (UnknownHostException e) {

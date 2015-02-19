@@ -6,7 +6,8 @@ public class Parser {
 		String delims = "[ ]+";
 		String[] tokens = message.split(delims);
 		System.out.println(tokens[2]);
-		return tokens[3];
+		return tokens[2];
+		
 	}
 	
 	public String parseAdd (String message){

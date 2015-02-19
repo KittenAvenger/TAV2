@@ -30,35 +30,29 @@ public class Server implements Runnable
 	public void run() 
 	{
 		start();
-		try {
-			clientSocket = serverSocket.accept();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		while(true){	
-		try 
-		{    
-			
-			    
-//			    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-//			    BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
-//			    
-//			    out.println(text + "\n");
-			    new Thread(
-			            new Connection(
-			            clientSocket)
-			            ).start();
-//			    while ((str = in.readLine()) != null && !str.isEmpty())  {
-//			        System.out.println("From client: " + str);		
-//			        checkID(str);			     
-//			    }   
-		}
 		
-		catch (Exception e){
-			e.printStackTrace();
-		}
-	}
-	}
+		while(! isStopped()){
+            Socket clientSocket = null;
+            try {
+                clientSocket = this.serverSocket.accept();
+            } catch (IOException e) {
+                if(isStopped()) {
+                    System.out.println("Server Stopped.") ;
+                    return;
+                }
+                throw new RuntimeException(
+                    "Error accepting client connection", e);
+            }
+            new Thread(
+                new Connection(
+                    clientSocket)
+            ).start();
+        }
+        System.out.println("Server Stopped.") ;
+    }
+		
+		
+	
 	
 	public void checkID(String request){
 		ID = parse.parseRequest(request);

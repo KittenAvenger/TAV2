@@ -46,19 +46,22 @@ public class TestConnection {
 	public void testMultipleConnection(){
 		Server server = new Server();
 		new Thread(server).start();
+		String message = null;
 		
 		Client client = new Client();
-		
+		Client client2 = new Client();
+		Client client3 = new Client();
 		
 		try {
 			client.connect();
-			client.connect();
+			message = client2.connect();
+			message = client3.connect();
 		    Thread.sleep(700);
 		} catch (InterruptedException e) {
 		    e.printStackTrace();
 		}
 		
-		assertTrue(server.idExists);
+		assertEquals("Connection denied", message);
 	}
 
 }

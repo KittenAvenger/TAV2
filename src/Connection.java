@@ -23,22 +23,25 @@ public class Connection implements Runnable{
 		out.println(text + "\n");
 		    
 		
-		 Parser parse= new Parser();
+		 
 		 while ((str = in.readLine()) != null && !str.isEmpty())  {
 		        System.out.println("From client: " + str);	
 		        
 		       
 				
-		    	String ID = str;
+		    	
+		    	Parser parse= new Parser();
+		    	String ID = parse.parseRequest(str);
 		        if (existsID(ID)==true){
 					
 					out.write("<Accepted connection from '"+ID+"'");
 					out.close();
-			            	in.close();
-			            	System.out.println("Request processed");
+			        in.close();
+			        Server.ProcessIDList.add(ID);
+			         System.out.println("Request processed");
 				}
 				else{
-					System.out.println("Connection denied");
+					out.write("Connection denied");
 				}
 		    }   
 		
@@ -53,11 +56,14 @@ public class Connection implements Runnable{
     
     
     public boolean existsID(String request){
-	Parser parse= new Parser();
-    	String ID = parse.parseRequest(request);
+	
 		
 	for(int i = 0; i < Server.ProcessIDList.size(); i++){
-		if(Server.ProcessIDList.get(i).equals(ID)){
+		
+		System.out.println("Size of list is: " + Server.ProcessIDList.get(i));
+		
+		
+		if(Server.ProcessIDList.get(i).equals(request)){
 			return false;
 		}
 			
