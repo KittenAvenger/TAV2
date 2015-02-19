@@ -5,9 +5,11 @@ import org.junit.Test;
 
 public class MockServer {
 
+	Server mockServer = mock(Server.class);
+	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void serverTest(){
+		
 	}
 
 }
