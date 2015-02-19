@@ -21,7 +21,7 @@ public class TestConnection {
 		    e.printStackTrace();
 		}
 		server.stop();
-		assertEquals("<Accepted connection from  1234 +/>", message );
+		assertEquals("<Accepted connection from '1234' +/>", message );
 	}
 	
 	@Test

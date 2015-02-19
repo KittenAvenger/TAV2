@@ -20,7 +20,7 @@ public class Connection implements Runnable{
         	
         	PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
-		out.println(text + "\n");
+		
 		    
 		
 		 
@@ -28,25 +28,28 @@ public class Connection implements Runnable{
 		        System.out.println("From client: " + str);	
 		        
 		       
-				
+		        //out.println(text + "\n");
 		    	
 		    	Parser parse= new Parser();
 		    	String ID = parse.parseRequest(str);
-		        if (existsID(ID)==true){
+		        if (existsID(ID)==false){
+		        	out.println("Connection denied");
+		        	out.flush();
+		        	System.out.println("connection refused");
+		        	
+		        	
 					
-					out.write("<Accepted connection from '"+ID+"'");
-					out.close();
-			        in.close();
+				}
+				else if (existsID(ID)==true){
+					out.println("<Accepted connection from '"+ID+"' +/>");
+					//out.close();
+			        //.close();
 			        Server.ProcessIDList.add(ID);
 			         System.out.println("Request processed");
-				}
-				else{
-					out.write("Connection denied");
 				}
 		    }   
 		
 		
-
            
         } 
         catch (IOException e) {

@@ -33,9 +33,9 @@ public class Client {
 //		    if(in.ready()){
 //		    	 
 //		    }
-		    
+		   
 		    while ((str = in.readLine()) != null && !str.isEmpty()) {
-		    	
+		    	 
 			      System.out.println("From server: " + str);
 			      break;
 			    }
