@@ -46,6 +46,35 @@ public class Connection implements Runnable{
 			        //.close();
 			        Server.ProcessIDList.add(ID);
 			         System.out.println("Request processed");
+			         
+			         
+			         while(true){
+			        	Scanner scan = new Scanner (System.in);
+			            switch(scan.next()){
+			            	case "<AddMessage>":
+			            		
+			            		System.out.println("message add");
+			            		break;
+			            	case "<DelMessage>":
+			            		
+			            		break;
+			            		
+			            	case "<RplMessage>":
+			            		
+			            		break;
+			            	case "<FetchMessages/>":
+			            		
+			            		break;
+			            	case "<FetchComplete/>":
+			            		
+			            		break;
+			            		
+			       
+			            	
+			            }
+			        }
+			         
+			         
 				}
 		    }   
 		
