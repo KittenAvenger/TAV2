@@ -29,7 +29,7 @@ public class Connection implements Runnable{
 		        
 		       
 				
-		    	String ID = parse.parseRequest(str);
+		    	String ID = str;
 		        if (existsID(ID)==true){
 					
 					out.write("<Accepted connection from '"+ID+"'");
