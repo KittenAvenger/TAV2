@@ -53,7 +53,7 @@ public class TestParser {
 		
 		String test = "<AddMessage> <Receiver \"ID\" /> <Content \"This is my message's.\" /> </AddMessage>";
 		Parser parse = new Parser();
-		String msg = parse.parseID(test);
+		String msg = parse.parseAddID(test);
 		
 		assertEquals("ID", msg);
 	}
@@ -63,7 +63,7 @@ public class TestParser {
 		
 		String test = "<RplMessage> <MsgId \"ID\" /> <Content \"TEXT\" /> </RplMessage>";
 		Parser parse = new Parser();
-		String msg = parse.parseID(test);
+		String msg = parse.parseAddID(test);
 		
 		assertEquals("ID", msg);
 	}
@@ -73,7 +73,7 @@ public class TestParser {
 		
 		String test = "<Messages> <Sender \"ID\" /> <Content \"TEXT\" /> </Message>";
 		Parser parse = new Parser();
-		String msg = parse.parseID(test);
+		String msg = parse.parseAddID(test);
 		
 		assertEquals("ID", msg);
 	}

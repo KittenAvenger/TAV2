@@ -3,7 +3,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+
 
 public class Connection implements Runnable{
 
@@ -35,7 +35,7 @@ public class Connection implements Runnable{
 		        	out.println("Connection denied");
 		        	out.flush();
 		        	
-		        System.out.println("connection refused");
+		        //System.out.println("connection refused");
 
 				}
 				else if (existsID(ID)==true){
@@ -44,7 +44,7 @@ public class Connection implements Runnable{
 			        //.close();
 					sender = ID;
 			        Server.ProcessIDList.add(ID);
-			        System.out.println("Request processed");
+			        //System.out.println("Request processed");
 			         
 			         while(true){			        	
 			        	 //System.out.println(input + " jdjdjdjd");
@@ -66,21 +66,21 @@ public class Connection implements Runnable{
 			        	Parser parser= new Parser();
 			        	Kernel karn = new Kernel();
 			        	
-			        	System.out.println(test);
+			        	//System.out.println(test);
 			        	switch(test){
 			            	case "AddMessage":
 			            		
 			            		
 			            		String message ="";
-			            		String sender ="1234567890";
+			            		String sender ="1";
 			            		String recipent ="";
-			            		recipent = parser.parseID(input);
-			            		
+			            		recipent = parser.parseAddID(input);
 			            		message = parser.parseAdd(input);
-			            		System.out.println(message);
+			            		sender = ID;
+			            		//System.out.println(message);
 			            		this.result = karn.add(message, sender, recipent);
 			            		if(result==-1){
-			            			System.out.println("<ErrorMsg> Reason </ErrorMsg>");
+			            			//System.out.println("<ErrorMsg> Reason </ErrorMsg>");
 			            			out.println("<ErrorMsg> Reason </ErrorMsg>");
 			            			break;
 			            		}

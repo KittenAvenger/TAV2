@@ -48,7 +48,7 @@ public class Server implements Runnable
                     clientSocket)
             ).start();
         }
-        System.out.println("Server Stopped.") ;
+        //System.out.println("Server Stopped.") ;
     }
 		
 		
@@ -61,7 +61,7 @@ public class Server implements Runnable
 	    for(int i = 0; i < ProcessIDList.size(); i++)
 	    {
 			if(ProcessIDList.get(i).equals(ID)){
-				System.out.println("it works");
+				//System.out.println("it works");
 				//out.println("Request denied");
 				idExists = true;
 				break;

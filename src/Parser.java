@@ -24,7 +24,7 @@ public class Parser {
 		return tokens[3];
 	}
 	
-	public String parseID(String message){
+	public String parseAddID(String message){
 		
 		String pattern = "[\"]";
 		String[] tokens = message.split(pattern);

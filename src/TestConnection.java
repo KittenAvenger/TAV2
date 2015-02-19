@@ -23,7 +23,7 @@ public class TestConnection {
 		    e.printStackTrace();
 		}
 		server.stop();
-		assertEquals("<Accepted connection from '1234' +/>", message );
+		assertEquals("<Accepted connection from '1234567890' +/>", message );
 	}
 	
 	@Test
@@ -62,7 +62,7 @@ public class TestConnection {
 		} catch (InterruptedException | IOException e) {
 		    e.printStackTrace();
 		}
-		
+		server.stop();
 		assertEquals("Connection denied", message);
 	}
 	
@@ -86,7 +86,7 @@ public class TestConnection {
 		server.stop();
 		String pattern = "[^\\d]*";
 		String idD = add.replaceAll(pattern, "");
-		System.out.println(idD);
+		//System.out.println(idD);
 		
 //		String[] tokens = add.split(pattern);
 //		
