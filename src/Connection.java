@@ -44,12 +44,31 @@ public class Connection implements Runnable{
 			        System.out.println("Request processed");
 			         
 			         while(true){
-			        	Scanner scan = new Scanner (System.in);
-			            switch(scan.next()){
+			        	Scanner scan = new Scanner(System.in);
+			            String input = scan.next();
+			            
+			        	String operation = input.split("[\"]")[0];
+			        	System.out.println(operation);
+			        	Parser parser= new Parser();
+			        	Karnel karn = new Karnel();
+			        	
+			        	switch(operation){
 			            	case "<AddMessage>":
+			            		String message ="";
+			            		String sender ="";
+			            		String recipent ="";
+			            		int result = karn.add(message, sender, recipent);
+			            		if(result==-1){
+			            			System.out.println("<ErrorMsg> Reason </ErrorMsg>");
+			            		}
+			            		else{
+			            			System.out.println("<Message added: '"+result+"' />");
+			            		}
 			            		
-			            		System.out.println("message add");
+			            		
+			            		out.println("message add");
 			            		break;
+			            	
 			            	case "<DelMessage>":
 			            		
 			            		break;
@@ -63,8 +82,11 @@ public class Connection implements Runnable{
 			            	case "<FetchComplete/>":
 			            		
 			            		break;
+			            		
+			       
+			            	
 			            }
-			        } 
+			        }
 				}
 		    }    
         } 
