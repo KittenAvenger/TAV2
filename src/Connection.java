@@ -50,7 +50,7 @@ public class Connection implements Runnable{
 			        	String operation = input.split("[\"]")[0];
 			        	System.out.println(operation);
 			        	Parser parser= new Parser();
-			        	Karnel karn = new Karnel();
+			        	Kernel karn = new Kernel();
 			        	
 			        	switch(operation){
 			            	case "<AddMessage>":
