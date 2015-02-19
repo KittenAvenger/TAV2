@@ -3,23 +3,24 @@ import java.io.IOException;
 
 public class Threads {
 	    private Thread thread = null;
-	    private Server runnable = null;
+	    private Server runnableServer = null;
+	    private Client runnableClient = null;
 
 	    
 	    public void startServer() {
-	        runnable = new Server();
-	        thread = new Thread(runnable);
-	        System.out.println("Starting thread: " + thread);
+	        runnableServer = new Server();
+	        thread = new Thread(runnableServer);
+	        System.out.println("Starting Server thread: " + thread);
 	        thread.start();
 	    }
 	    
 	    public void stopServer() throws InterruptedException {
 	        if (thread != null) {
-	            runnable.terminate();
+	            runnableServer.terminate();
 	            thread.join();
-	            System.out.println("stopped");
+	            System.out.println("stopped server thread " + thread);
 	            try {
-					runnable.serverSocket.close();
+					runnableServer.serverSocket.close();
 					System.out.println("server socket closed");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -27,4 +28,26 @@ public class Threads {
 				}
 	        }
 	    }
+	    
+	    /*public void startClient() {
+	        runnableClient = new Client();
+	        thread = new Thread(runnableClient);
+	        System.out.println("Starting Client thread: " + thread);
+	        thread.start();
+	    }
+	    
+	    public void stopClient() throws InterruptedException {
+	        if (thread != null) {
+	            runnableClient.terminate();
+	            thread.join();
+	            System.out.println("stopped client thread " + thread );
+	            try {
+					runnableClient.clientSocket.close();
+					System.out.println("client socket closed");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	    }*/
 }
