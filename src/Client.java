@@ -16,39 +16,50 @@ public class Client {
 	Socket conn = null;
 	
 
-	public String connect(){
+	public String connect() throws IOException{
+		
 		try {
-			 conn = new Socket (InetAddress.getLocalHost(), 4444);
+			conn = new Socket (InetAddress.getLocalHost(), 4444);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+			 
 			 
 		    PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 		    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-//		    while(i < 10){
-//		    text = scan.next();	
-//		    out.println(text);
-//		    i++;
-//		    }
+
 		    
 		    out.println("<Request connection  1234 +/>" + "\n");
 		
-//		    if(in.ready()){
-//		    	 
-//		    }
-		   
+
 		    while ((str = in.readLine()) != null && !str.isEmpty()) {
 		    	 
 			      System.out.println("From server: " + str);
 			      break;
 			    }
-		    //System.out.println("Shit didn't work");
+		    
 		    
 			
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		return str;
 		
+		}	
+		
+	public String addMessage() throws IOException{
+		
+		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+	    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+	    
+	    out.println("<AddMessage> <Receiver \"ID\" /> <Content \"This is my message's.\" /> </AddMessage>");
+	    
+	    while ((str = in.readLine()) != null && !str.isEmpty()) {
+	    	 
+		      System.out.println("From server: " + str);
+		      break;
+		    }
+		
+	    return str;
 	}
 }

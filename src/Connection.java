@@ -8,8 +8,9 @@ import java.util.Scanner;
 public class Connection implements Runnable{
 
     Socket clientSocket = null;
-    String str;
+    String input;
     String text = "<Accepted connection from  1234 +/>";
+    String sender;
 
     public Connection(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -22,13 +23,13 @@ public class Connection implements Runnable{
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
 		 
-		 while ((str = in.readLine()) != null && !str.isEmpty())  {
-		        System.out.println("From client: " + str);	
+		 while ((input = in.readLine()) != null && !input.isEmpty())  {
+		        System.out.println("From client: " + input);	
 		        
 		        //out.println(text + "\n");
 		    	
 		    	Parser parse= new Parser();
-		    	String ID = parse.parseRequest(str);
+		    	String ID = parse.parseRequest(input);
 		        if (existsID(ID)==false){
 		        	out.println("Connection denied");
 		        	out.flush();
@@ -40,26 +41,31 @@ public class Connection implements Runnable{
 					out.println("<Accepted connection from '"+ID+"' +/>");
 					//out.close();
 			        //.close();
+					sender = ID;
 			        Server.ProcessIDList.add(ID);
 			        System.out.println("Request processed");
 			         
 			         while(true){			        	
-			          
-			        	 while ((str = in.readLine()) != null && !str.isEmpty())  {
-			 		        System.out.println("From client: " + str);
+			        	 //System.out.println(input + " jdjdjdjd");
+			        	 while ((input = in.readLine()) != null && !input.isEmpty())  {
+			 		        System.out.println("From client: " + input);
+			 		        break;
 			        	 }
-			        	String operation = str.split("[\"]")[0];
+			        	String operation = input.split("[\"]")[0];
 			        	System.out.println(operation);
 			        	Parser parser= new Parser();
 			        	Kernel karn = new Kernel();
-			        	String msgID = null;
+			        	
 			        	
 			        	switch(operation){
 			            	case "<AddMessage>":
-			            		parser.parseAdd(str);
+			            		
+			            		
 			            		String message ="";
 			            		String sender ="";
 			            		String recipent ="";
+			            		recipent = parser.parseID(input);
+			            		message = parser.parseAdd(input);
 			            		int result = karn.add(message, sender, recipent);
 			            		if(result==-1){
 			            			System.out.println("<ErrorMsg> Reason </ErrorMsg>");
@@ -69,22 +75,22 @@ public class Connection implements Runnable{
 			            		}
 			            		
 			            		
-			            		out.println("message add");
+			            		out.println("message added " + result);
 			            		break;
 			            	
-			            	case "<DelMessage>":
-			            		
-			            		break;
-			            		
-			            	case "<RplMessage>":
-			            		
-			            		break;
-			            	case "<FetchMessages/>":
-			            		
-			            		break;
-			            	case "<FetchComplete/>":
-			            		
-			            		break;
+//			            	case "<DelMessage>":
+//			            		
+//			            		break;
+//			            		
+//			            	case "<RplMessage>":
+//			            		
+//			            		break;
+//			            	case "<FetchMessages/>":
+//			            		
+//			            		break;
+//			            	case "<FetchComplete/>":
+//			            		
+//			            		break;
 			            		
 			       
 			            	
