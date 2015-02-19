@@ -43,17 +43,20 @@ public class Connection implements Runnable{
 			        Server.ProcessIDList.add(ID);
 			        System.out.println("Request processed");
 			         
-			         while(true){
-			        	Scanner scan = new Scanner(System.in);
-			            String input = scan.next();
-			            
-			        	String operation = input.split("[\"]")[0];
+			         while(true){			        	
+			          
+			        	 while ((str = in.readLine()) != null && !str.isEmpty())  {
+			 		        System.out.println("From client: " + str);
+			        	 }
+			        	String operation = str.split("[\"]")[0];
 			        	System.out.println(operation);
 			        	Parser parser= new Parser();
 			        	Kernel karn = new Kernel();
+			        	String msgID = null;
 			        	
 			        	switch(operation){
 			            	case "<AddMessage>":
+			            		parser.parseAdd(str);
 			            		String message ="";
 			            		String sender ="";
 			            		String recipent ="";

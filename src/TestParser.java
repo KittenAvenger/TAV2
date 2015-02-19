@@ -8,7 +8,7 @@ public class TestParser {
 	@Test
 	public void testParseConnection() {
 		
-		String test = "<Accepted connection from  \"1234\" +/>";
+		String test = "<Request connection  1234 +/>";
 		Parser parse = new Parser();
 		String ID = parse.parseRequest(test);
 		
@@ -47,4 +47,46 @@ public class TestParser {
 		
 		assertEquals("TEXT", msg);
 	}
+	
+	@Test
+	public void testParseIDAdd() {
+		
+		String test = "<AddMessage> <Receiver \"ID\" /> <Content \"This is my message's.\" /> </AddMessage>";
+		Parser parse = new Parser();
+		String msg = parse.parseID(test);
+		
+		assertEquals("ID", msg);
+	}
+	
+	@Test
+	public void testParseIDReplace() {
+		
+		String test = "<RplMessage> <MsgId \"ID\" /> <Content \"TEXT\" /> </RplMessage>";
+		Parser parse = new Parser();
+		String msg = parse.parseID(test);
+		
+		assertEquals("ID", msg);
+	}
+	
+	@Test
+	public void testParseFetchID() {
+		
+		String test = "<Messages> <Sender \"ID\" /> <Content \"TEXT\" /> </Message>";
+		Parser parse = new Parser();
+		String msg = parse.parseID(test);
+		
+		assertEquals("ID", msg);
+	}
+	
+	@Test
+	public void testParseFetchMessage() {
+		
+		String test = "<Messages> <Sender \"ID\" /> <Content \"TEXT\" /> </Message>";
+		Parser parse = new Parser();
+		String msg = parse.parseFetchMessage(test);
+		
+		assertEquals("TEXT", msg);
+	}
+	
+	
 }

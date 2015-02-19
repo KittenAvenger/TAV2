@@ -5,7 +5,7 @@ public class Parser {
 		
 		String delims = "[ ]+";
 		String[] tokens = message.split(delims);
-		System.out.println(tokens[2]);
+		//System.out.println(tokens[2]);
 		return tokens[2];
 		
 	}
@@ -24,6 +24,14 @@ public class Parser {
 		return tokens[3];
 	}
 	
+	public String parseID(String message){
+		
+		String pattern = "[\"]";
+		String[] tokens = message.split(pattern);
+		
+		return tokens[1];
+	}
+	
 	// need to add if the message doesn't exist or was fetched + 
 	//the msg was not deleted then return an ERROR msg
 	public String parseDelete (String message){
@@ -37,6 +45,14 @@ public class Parser {
 	}
 	
 	public String parseReplace (String message){
+		
+		String pattern = "[\"]";
+		String[] tokens = message.split(pattern);
+		
+		return tokens[3];
+	}
+	
+	public String parseFetchMessage (String message){
 		
 		String pattern = "[\"]";
 		String[] tokens = message.split(pattern);
