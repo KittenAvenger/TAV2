@@ -99,9 +99,18 @@ public class Connection implements Runnable{
 //			            	case "<RplMessage>":
 //			            		
 //			            		break;
-//			            	case "<FetchMessages/>":
-//			            		
-//			            		break;
+
+			            	case "FetchMessages":
+			            		String output = "";
+			            		output = karn.fetch(ID);
+			            		if(output.equals("Message doesn't exist")){
+			            			out.println("<ErrorMsg> + output + </ErrorMsg>");
+			            		}
+			            		else{
+			            			out.println("<FetchedMessages>\n"+ output + "\n<FetchedMessages>");
+			            		}
+			            		break;
+			            		
 			            	case "FetchComplete":
 			            		if(karn.fetch_complete(ID)==1){
 			            			out.println("<FetchedCompleteAck/>");
@@ -111,15 +120,14 @@ public class Connection implements Runnable{
 			            		}
 			            		break;
 			            		
-			       
-			            	
+			      
 			            }
 			        	
-			        	 } 
+			         } 
 			        	 
 			         }
-				}
-		    }    
+			}
+		}    
         } 
         catch (IOException e) {
             //e.printStackTrace();
