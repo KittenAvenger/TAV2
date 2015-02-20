@@ -109,9 +109,10 @@ public class Kernel implements WhatsUpGU {
 		
 		for(int i=0; i<server.size(); i++) {
 			if (server.get(i).getReceiver().equals(receiver) && server.get(i).isFetched() == false) {
-				message = message + "\nMessage id: " + server.get(i).getID() + "\nMessage: '"+
-					server.get(i).getMessage()+"'\n"
-					+ "Sender: "+server.get(i).getSender();
+				message = message +"\n<Messages>"+ 
+						"\n<Sender '"+server.get(i).getSender()+"' />"+
+						"\n<Content '"+ server.get(i).getMessage()+"' />"+
+						"\n</Messages>";
 	//System.out.println(message);
 				server.get(i).setFetched();
 				count++;
