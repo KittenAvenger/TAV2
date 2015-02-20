@@ -13,7 +13,7 @@ public class Connection implements Runnable{
     String sender, test;
     int result = 0;
 
-    public Connection(Socket clientSocket) {
+    public Connection (Socket clientSocket) {
         this.clientSocket = clientSocket;
         
     }
@@ -27,7 +27,7 @@ public class Connection implements Runnable{
 		 while ((input = in.readLine()) != null && !input.isEmpty())  {
 		        System.out.println("From client: " + input);	
 		        
-		        //out.println(text + "\n");
+		        
 		    	
 		    	Parser parse= new Parser();
 		    	String ID = parse.parseRequest(input);
@@ -35,19 +35,19 @@ public class Connection implements Runnable{
 		        	out.println("Connection denied");
 		        	out.flush();
 		        	
-		        //System.out.println("connection refused");
+		        
 
 				}
 				else if (existsID(ID)==true){
 					out.println("<Accepted connection from '"+ID+"' +/>");
-					//out.close();
-			        //.close();
+					
 					sender = ID;
-			        Server.ProcessIDList.add(ID);
-			        //System.out.println("Request processed");
+					addID(ID);
+			        
+			        
 			         
 			         while(true){			        	
-			        	 //System.out.println(input + " jdjdjdjd");
+			        	 
 			        	 while ((input = in.readLine()) != null && !input.isEmpty())  {
 			 		        System.out.println("From client: " + input);
 			 		        break;
@@ -57,12 +57,9 @@ public class Connection implements Runnable{
 			        		 
 			        	 }
 			        	 else{
-			        	 test = parse(input);
+			        	test = parse(input);
 		        	 
-//			        	 for (int i = 0; i < tokens.length; i++){
-//			        		 //System.out.println(tokens[i] + " kaki");
-//			        	 }
-//			        	System.out.println(operation + " kdjfkajdkf");
+
 			        	Parser parser= new Parser();
 			        	Kernel karn = new Kernel();
 			        	
@@ -87,6 +84,7 @@ public class Connection implements Runnable{
 			            		else{
 			            			//System.out.println("<Message added: '"+result+"' />");
 			            			out.println("<Message added: '" + result + "' />");
+			            			Server.ProcessIDList.remove(result-1);
 			            			break;
 			            		}
 			            		
@@ -124,7 +122,7 @@ public class Connection implements Runnable{
     }
     
     
-    public boolean existsID(String request){
+    private synchronized boolean existsID(String request){
 	
 		
 	for(int i = 0; i < Server.ProcessIDList.size(); i++){
@@ -138,10 +136,14 @@ public class Connection implements Runnable{
 	return true;        
     }
     
-    public synchronized String parse(String msg ){
+    private synchronized String parse(String msg ){
     	String pattern = "[<>]";
    	 String[] tokens = input.split(pattern);
 	 return tokens[1];
+    }
+    
+    private synchronized void addID (String ID){
+    	Server.ProcessIDList.add(ID);
     }
     
     

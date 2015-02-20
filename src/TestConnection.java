@@ -24,6 +24,8 @@ public class TestConnection {
 		}
 		server.stop();
 		assertEquals("<Accepted connection from '1234567890' +/>", message );
+		
+		
 	}
 	
 	@Test
@@ -72,11 +74,11 @@ public class TestConnection {
 		new Thread(server).start();
 		
 		Client client = new Client();
-		String message = null;
-		String add = null;
+		//String message = null;
+		String add = "didn't work";
 		
 		try {
-		message = client.connect();
+		client.connect();
 		add = client.addMessage();
 		
 		    Thread.sleep(1000);
