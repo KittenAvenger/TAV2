@@ -79,7 +79,7 @@ public class Client {
 	    return str;
 	}
 	
-	public String fetchMessage(String ID) throws IOException{
+	public String fetchMessage() throws IOException{
 		
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
@@ -95,7 +95,7 @@ public class Client {
 	    	return str;
 	}
 
-	public String fetch_complete_Message(String ID) throws IOException{
+	public String fetch_complete_Message() throws IOException{
 	
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
     		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
