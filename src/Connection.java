@@ -92,9 +92,22 @@ public class Connection implements Runnable{
 			            		
 			            		
 			            	
-//			            	case "<DelMessage>":
-//			            		
-//			            		break;
+					case "DelMessage":
+			         
+			            		String msgID = "";
+			            		msgID = parser.parseAddID(input);
+			            		
+			            		this.result = karn.delete(Integer.parseInt(msgID));
+			  
+			            		if(result == -1){
+			            			out.println("<ErrorMsg> Reason </ErrorMsg>");
+			            			break;
+			            		}
+			            		else{
+			            			out.println("<Message deleted: '" + result + "' />");
+			            			Server.ProcessIDList.remove(result-1);
+			            			break;
+			            		}
 //			            		
 //			            	case "<RplMessage>":
 //			            		
