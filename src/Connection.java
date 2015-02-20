@@ -102,9 +102,14 @@ public class Connection implements Runnable{
 //			            	case "<FetchMessages/>":
 //			            		
 //			            		break;
-//			            	case "<FetchComplete/>":
-//			            		
-//			            		break;
+			            	case "FetchComplete":
+			            		if(karn.fetch_complete(ID)==1){
+			            			out.println("<FetchedCompleteAck/>");
+			            		}
+			            		else{
+			            			out.println("<ErrorMsg> No message to delete </ErrorMsg>");
+			            		}
+			            		break;
 			            		
 			       
 			            	
