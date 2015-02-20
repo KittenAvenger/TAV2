@@ -62,4 +62,20 @@ public class Client {
 		
 	    return str;
 	}
+	
+	public String DeleteMessage(String ID) throws IOException{
+		
+		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+	    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+	    
+	    out.println("<DelMessage> <MsgId \"" + ID + "\" /> </DelMessage>");
+	    
+	    while ((str = in.readLine()) != null && !str.isEmpty()) {
+	    	 
+		      System.out.println("From server: " + str);
+		      break;
+		    }
+		
+	    return str;
+	}
 }
