@@ -78,4 +78,36 @@ public class Client {
 		
 	    return str;
 	}
+	
+	public String FetchMessage(String ID) throws IOException{
+		
+		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+	    
+	    	out.println("<FetchMessages/>");
+	    
+	    	while ((str = in.readLine()) != null && !str.isEmpty()) {
+	    	 
+		      System.out.println("From server: " + str);
+		      break;
+		    }
+		
+	    	return str;
+	}
+
+	public String Fetch_complete_Message(String ID) throws IOException{
+	
+		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
+    		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
+    
+    		out.println("<FetchComplete/>");
+    
+    		while ((str = in.readLine()) != null && !str.isEmpty()) {
+    	 
+	      		System.out.println("From server: " + str);
+	      		break;
+		 }
+	
+    		return str;
+	}
 }
