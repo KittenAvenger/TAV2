@@ -7,7 +7,34 @@ import org.junit.Test;
 
 public class TestConnection {
 
-
+@Test
+	public void testDeleteMessage(){
+		Server server = new Server();
+		new Thread(server).start();
+		 
+		Client client = new Client();
+		String addMessage = "message added";
+		String deleteMessage = null;
+		String idD = null;
+				
+		try {
+			client.connect();
+			addMessage = client.addMessage();
+			String pattern = "[^\\d]*";
+			idD = addMessage.replaceAll(pattern, "");
+		 	deleteMessage = idD;
+		 	deleteMessage = client.DeleteMessage(idD);
+		 	Thread.sleep(1000);
+			
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			server.stop();
+			assertEquals("<Message deleted: '" +idD +"' />", deleteMessage );
+		 
+		
+	}
 	@Test
 	public void testServerReply() {
 		Server server = new Server();
