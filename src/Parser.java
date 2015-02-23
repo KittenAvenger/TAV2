@@ -28,13 +28,13 @@ public class Parser {
 		return tokens[1];
 	}
 	
-public String msgID(String message){
-		
-		String pattern = "[']";
-		String[] tokens = message.split(pattern);
-		
-		return tokens[1];
-	}
+//	public String msgID(String message){
+//		
+//		String pattern = "[']";
+//		String[] tokens = message.split(pattern);
+//		
+//		return tokens[1];
+//	}
 	
 	// need to add if the message doesn't exist or was fetched + 
 	//the msg was not deleted then return an ERROR msg

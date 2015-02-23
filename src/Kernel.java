@@ -113,7 +113,7 @@ public class Kernel implements WhatsUpGU {
 						"\n<Sender \""+server.get(i).getSender()+"\" />"+
 						"\n<Content \""+ server.get(i).getMessage()+"\" />"+
 						"\n</Messages>";
-	//System.out.println(message);
+
 				server.get(i).setFetched();
 				count++;
 			}
