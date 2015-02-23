@@ -1,128 +1,143 @@
 import static org.junit.Assert.*;
-
 import java.io.IOException;
-
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class TestConnection {
 
-@Test
-	public void testDeleteMessage(){
-		Server server = new Server();
-		new Thread(server).start();
-		 
-		Client client = new Client();
-		String addMessage = "message added";
-		String deleteMessage = null;
-		String idD = null;
-				
-		try {
-			client.connect();
-			addMessage = client.addMessage();
-			String pattern = "[^\\d]*";
-			idD = addMessage.replaceAll(pattern, "");
-		 	deleteMessage = idD;
-		 	deleteMessage = client.DeleteMessage(idD);
-		 	Thread.sleep(1000);
-			
-		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
+
+	String accountID = "1234567890", message, receiver = "0702241845", testMsg = "Hey what is up", replaceMsg = "Shit man bacon is on sale";
+	Server server;
+	Client client;
+	Thread thisThread;
+	
+	
+	@Before
+	public void setUp()
+	{
+		server = new Server();
+		thisThread = new Thread(server);
+		thisThread.start();
+		client = new Client();
+	}
+	
+	
+	@Test
+	public void testSingleConnection() throws InterruptedException 
+	{
+		
+		try 
+		{
+			assertEquals("<Accepted connection from '1234567890' +/>", client.connect(accountID));  
+		} 
+		
+		catch ( IOException e) 
+		{
 			e.printStackTrace();
 		}
-			server.stop();
-			assertEquals("<Message deleted: '" +idD +"' />", deleteMessage );
-		 
 		
 	}
+	
+	
 	@Test
-	public void testServerReply() {
-		Server server = new Server();
-		new Thread(server).start();
+	public void testMultipleConnections() throws InterruptedException
+	{
+			Client client2 = new Client();
+			Client client3 = new Client();
 		
-		Client client = new Client();
-		String message = null;
+		try 
+		{
+			client.connect(accountID);
+			assertEquals("Connection denied", client2.connect(accountID));
+			assertEquals("Connection denied", client3.connect(accountID));
+		} 
 		
-		try {
-		message = client.connect();
-		    Thread.sleep(1000);
-		} catch (InterruptedException | IOException e) {
+		catch (IOException e) 
+		{
 		    e.printStackTrace();
 		}
-		server.stop();
-		assertEquals("<Accepted connection from '1234567890' +/>", message );
+	}
+	
+	@Test
+	public void testServerAddMessage() throws InterruptedException 
+	{
+
+		String msg, ID;
+
+		try 
+		{
+			client.connect(accountID);
+			ID = parse(msg = client.addMessage(receiver, testMsg));
+			
+			assertEquals("<Message added: '" + ID  + "' />", msg );
+		} 
 		
+		catch ( IOException e) 
+		{
+		    e.printStackTrace();
+		}
 		
 	}
 	
 	@Test
-	public void testServerStopped(){
-		Server server = new Server();
-		new Thread(server).start();
+	public void testServerReplaceMessage() throws InterruptedException 
+	{
+		String ID;
 		
-		Client client = new Client();
+		try 
+		{
+			client.connect(accountID);
+			ID = parse(client.addMessage(receiver, testMsg));
+			assertEquals("<Message replaced: '" + ID +"' />", client.replaceMessage(ID, replaceMsg));
+		} 
 		
-		try {
-			client.connect();
-		    Thread.sleep(1000);
-		} catch (InterruptedException | IOException e) {
+		catch (IOException e) 
+		{
 		    e.printStackTrace();
 		}
-		server.stop();
-		
-		assertTrue(server.isStopped());
 	}
 	
 	@Test
-	public void testMultipleConnection(){
-		Server server = new Server();
-		new Thread(server).start();
-		String message = null;
+	public void testDeleteMessage()
+	{
+		String ID;
+				
+		try 
+		{
+			client.connect(accountID);
+			ID = parse(client.addMessage(receiver, testMsg));
+			assertEquals("<Message deleted: '" + ID + "' />", client.deleteMessage(ID));
+		} 
 		
-		Client client = new Client();
-		Client client2 = new Client();
-		Client client3 = new Client();
-		
-		try {
-			client.connect();
-			message = client2.connect();
-			message = client3.connect();
-		    Thread.sleep(700);
-		} catch (InterruptedException | IOException e) {
-		    e.printStackTrace();
+		catch (IOException e) 
+		{
+			e.printStackTrace();
 		}
-		server.stop();
-		assertEquals("Connection denied", message);
 	}
 	
-	@Test
-	public void testServerAddMessage() {
-		Server server = new Server();
-		new Thread(server).start();
+	@After
+	public void tearDown() throws IOException
+	{
 		
-		Client client = new Client();
-		//String message = null;
-		String add = "didn't work";
-		
-		try {
-		client.connect();
-		add = client.addMessage();
-		
-		    Thread.sleep(1000);
-		} catch (InterruptedException | IOException e) {
-		    e.printStackTrace();
+		if(client != null)
+		{
+			assertEquals("Client disconnected", client.disconnect());
 		}
+		
 		server.stop();
+		assertTrue(server.isStopped);
+		
+	}
+	
+	private String parse(String msg)
+	{
+		String idD = null;
 		String pattern = "[^\\d]*";
-		String idD = add.replaceAll(pattern, "");
-		//System.out.println(idD);
+		idD = msg.replaceAll(pattern, "");
 		
-//		String[] tokens = add.split(pattern);
-//		
-//		for (int i = 0; i < tokens.length; i++)
-//	    System.out.println(tokens[i] + "ffffff");
-		
-		assertEquals("<Message added: '" +idD +"' />", add );
+		return idD;
 	}
 
 }
