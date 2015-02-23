@@ -8,16 +8,14 @@ public class Server implements Runnable
 {
 	
 	int port = 4444;
-	String str, ID;
-	String text = "<Accepted connection from  1234 +/>";
 	ServerSocket serverSocket = null;
-	boolean isStopped = false, idExists = false;
+	boolean isStopped = false;
 	static ArrayList <String> ProcessIDList = new ArrayList<String>();
-	Parser parse = new Parser();
 	Socket clientSocket = null;
 
-	public void start ()
+	private synchronized void start ()
 	{
+		System.out.println("Server started");
 		
 		try 
 		{
@@ -30,22 +28,23 @@ public class Server implements Runnable
 		}
 	}
 	
-	public void run() 
+	public synchronized void run() 
 	{
 		start();
 		
 		while(!isStopped())
 		{
             Socket clientSocket = null;
+            
             try 
             {
                 clientSocket = this.serverSocket.accept();
             } 
+            
             catch (IOException e) 
             {
                 if(isStopped()) 
                 {
-                    System.out.println("Server Stopped.") ;
                     return;
                 }
                 
@@ -57,14 +56,16 @@ public class Server implements Runnable
         
     }
 		
-	public synchronized void stop()
+	public void stop()
 	{
         this.isStopped = true;
+        
         try 
         {
             this.serverSocket.close();
             System.out.println("Server has been stopped");
         } 
+        
         catch (IOException e) 
         {
         	e.printStackTrace();
@@ -72,7 +73,7 @@ public class Server implements Runnable
         }
     }
 	
-	public synchronized boolean isStopped()
+	private synchronized  boolean isStopped()
 	{
 		return isStopped;
 	}
