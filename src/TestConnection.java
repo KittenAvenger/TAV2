@@ -117,6 +117,80 @@ public class TestConnection {
 		}
 	}
 	
+	@Test
+	public void testServerFetch1()
+	{
+			
+		try 
+		{
+			client.connect(accountID);
+			client.addMessage(receiver, testMsg);
+			
+			assertEquals("<ErrorMsg> " + "Message doesn't exist" + " </ErrorMsg>", client.fetchMessage());
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testServerFetch2()
+	{
+			
+		try 
+		{
+			client.connect(accountID);
+			client.addMessage(receiver, testMsg);
+			client.disconnect();
+			client.connect("0702241845");
+			String output = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";
+			assertEquals(output, client.fetchMessage());
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testServerFetch_complete1()
+	{
+			
+		try 
+		{
+			client.connect(accountID);		
+			assertEquals("<ErrorMsg> No message to delete </ErrorMsg>", client.fetch_complete_Message());
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testServerFetch_complete2()
+	{
+			
+		try 
+		{
+			client.connect(accountID);
+			client.addMessage(receiver, testMsg);
+			client.disconnect();
+			client.connect("0702241845");
+			client.fetchMessage();
+			assertEquals("<FetchedCompleteAck/>", client.fetch_complete_Message());
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	@After
 	public void tearDown() throws IOException
 	{
