@@ -80,26 +80,26 @@ public class ConnectionHandler
 	    			
 	    		}
 
-    		case "FetchMessages":
+    		case "FetchMessages/":
     			
 	    		String output = "";
 	    		output = kernel.fetch(accountID);
 	    		
 	    		if(output.equals("Message doesn't exist"))
 	    		{
-	    			return "<ErrorMsg> + output + </ErrorMsg>";
+	    			return "<ErrorMsg> " + " </ErrorMsg>";
 	    			
 	    		}
 	    		
 	    		else
 	    		{
-	    			return "<FetchedMessages>\n" + output + "\n<FetchedMessages>";
+	    			return "<FetchedMessages> " + output + " </FetchedMessages>";
 	    			
 	    		}
 	    		
     		
     		
-    		case "FetchComplete":
+    		case "FetchComplete/":
     			
 	    		if(kernel.fetch_complete(accountID) == 1)
 	    		{
@@ -110,7 +110,7 @@ public class ConnectionHandler
 	    		else
 	    		{
 	    			return "<ErrorMsg> No message to delete </ErrorMsg>";
-	    		}    		   	
+	    		}		   	
 	    }
 			return "Message didn't match";
 	}
