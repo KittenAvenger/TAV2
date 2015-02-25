@@ -72,6 +72,7 @@ public class TestConnection {
 			ID = parse(msg = client.addMessage(receiver, testMsg));
 			
 			assertEquals("<Message added: '" + ID  + "' />", msg );
+			assertEquals("<ErrorMsg> Reason </ErrorMsg>", client.addMessage(receiver, ""));				//Test adding empty message
 		} 
 		
 		catch ( IOException e) 
@@ -91,6 +92,7 @@ public class TestConnection {
 			client.connect(accountID);
 			ID = parse(client.addMessage(receiver, testMsg));
 			assertEquals("<Message replaced: '" + ID +"' />", client.replaceMessage(ID, replaceMsg));
+			assertEquals("<ErrorMsg> Reason </ErrorMsg>", client.replaceMessage(ID, ""));				//Test replacing message with empty text
 		} 
 		
 		catch (IOException e) 
@@ -109,6 +111,7 @@ public class TestConnection {
 			client.connect(accountID);
 			ID = parse(client.addMessage(receiver, testMsg));
 			assertEquals("<Message deleted: '" + ID + "' />", client.deleteMessage(ID));
+			assertEquals("<ErrorMsg> Reason </ErrorMsg>", client.deleteMessage(ID + 1));				//Test non existing message ID
 		} 
 		
 		catch (IOException e) 
@@ -116,6 +119,49 @@ public class TestConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testFetchMessage()
+	{
+		String fetchMsg = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";
+		
+		try 
+		{
+			client.connect(accountID);
+			client.addMessage(accountID, testMsg);
+			
+			assertEquals(fetchMsg, client.fetchMessage());
+			assertEquals("<FetchedCompleteAck/>", client.fetch_complete_Message());
+			assertEquals("<ErrorMsg> No message to delete </ErrorMsg>", client.fetch_complete_Message());
+			assertNotEquals(fetchMsg, client.fetchMessage());
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+//	@Test
+//	public void testServerFetch2() throws InterruptedException
+//	{
+//		try 
+//		{
+//			client.connect(accountID);
+//			client.addMessage(receiver, testMsg);
+//			client.disconnect();
+//			
+//			client.connect(receiver);
+//			String resp = client.fetchMessage();
+//			System.out.println("WALLAKEBAB from testFetch2: " + resp);
+//			String output = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";
+//			assertEquals(output, resp);
+//		} 
+//		catch (IOException e) 
+//		{
+//			e.printStackTrace();
+//		}
+//	}
 	
 	@Test
 	public void testServerFetch1()
@@ -202,6 +248,7 @@ public class TestConnection {
 		
 		server.stop();
 		assertTrue(server.isStopped);
+		Kernel.server.clear();
 		
 	}
 	

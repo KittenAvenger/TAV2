@@ -40,13 +40,13 @@ public class Connection implements Runnable
 					
 			        if (existsID(accountID) == true)
 			        {
-			        	out.println("Connection denied");
+			        	out.println("Connection denied\n");
 			     		break outerloop;		        			      
 					}
 			        
 					else 
 					{
-						out.println("<Accepted connection from '" + accountID + "' +/>");
+						out.println("<Accepted connection from '" + accountID + "' +/>\n");
 						addID(accountID);
 						sender = accountID;
 						

@@ -94,19 +94,25 @@ public class Client
 
 	public String fetchMessage() throws IOException
 	{
-	
+		String msg = "";
+		
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
 	    
 	    out.println("<FetchMessages/>");
 	    
-	    while ((str = in.readLine()) != null && !str.isEmpty()) 
+	    while ((str = in.readLine()) != null) 
 	    {
 	    	System.out.println("From server: " + str);
-		    break;
+	    	msg += str;
+	    	
+	    	if(str.equals("</FetchedMessages>") || str.equals("<ErrorMsg> all messages fetched </ErrorMsg>"))
+	    	{
+	    		break;
+	    	}    
 		}
 	
-    	return str;
+    	return msg;
 	}
 
 	public String fetch_complete_Message() throws IOException
@@ -115,7 +121,7 @@ public class Client
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
 
-		out.println("<FetchComplete/>");
+		out.println("<FetchComplete>");
 
 		while ((str = in.readLine()) != null && !str.isEmpty()) 
 	    {

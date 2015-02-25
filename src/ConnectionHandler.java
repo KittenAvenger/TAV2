@@ -84,22 +84,22 @@ public class ConnectionHandler
     			
 	    		String output = "";
 	    		output = kernel.fetch(accountID);
-	    		
+	    			    		
 	    		if(output.equals("Message doesn't exist"))
 	    		{
-	    			return "<ErrorMsg> " +output+ " </ErrorMsg>";
+	    			return "<ErrorMsg> all messages fetched </ErrorMsg>\n";
 	    			
 	    		}
 	    		
 	    		else
 	    		{
-	    			return "<FetchedMessages> " + output + " </FetchedMessages>";
+	    			return "<FetchedMessages>\n" + output + "\n</FetchedMessages>\n";
 	    			
 	    		}
 	    		
     		
     		
-    		case "FetchComplete/":
+    		case "FetchComplete":
     			
 	    		if(kernel.fetch_complete(accountID) == 1)
 	    		{
@@ -110,7 +110,7 @@ public class ConnectionHandler
 	    		else
 	    		{
 	    			return "<ErrorMsg> No message to delete </ErrorMsg>";
-	    		}		   	
+	    		}    		   	
 	    }
 			return "Message didn't match";
 	}

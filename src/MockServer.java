@@ -11,7 +11,7 @@ public class MockServer {
 	
 	@Test
 	public void serverTestAdd(){
-		
+		fail();
 	
 	}
 	
@@ -26,7 +26,7 @@ public class MockServer {
 		
 	}
 	//@Test
-	public void serverTestFetcg(){
+	public void serverTestFetch(){
 		
 			
 	}
