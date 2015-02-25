@@ -106,7 +106,7 @@ public class Client
 	    	System.out.println("From server: " + str);
 	    	msg += str;
 	    	
-	    	if(str.equals("</FetchedMessages>") || str.equals("<ErrorMsg> all messages fetched </ErrorMsg>"))
+	    	if(str.equals("</FetchedMessages>") || str.equals("<ErrorMsg> Message doesn't exist </ErrorMsg>"))
 	    	{
 	    		break;
 	    	}    

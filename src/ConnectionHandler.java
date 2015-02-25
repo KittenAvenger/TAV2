@@ -87,7 +87,7 @@ public class ConnectionHandler
 	    			    		
 	    		if(output.equals("Message doesn't exist"))
 	    		{
-	    			return "<ErrorMsg> all messages fetched </ErrorMsg>\n";
+	    			return "<ErrorMsg> " + output + " </ErrorMsg>\n";
 	    			
 	    		}
 	    		
