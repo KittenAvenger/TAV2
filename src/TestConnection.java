@@ -1,25 +1,38 @@
 import static org.junit.Assert.*;
+
 import java.io.IOException;
+import java.util.Random;
+
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+
 
 
 public class TestConnection {
 
 
 	String accountID = "1234567890", message, receiver = "0702241845", testMsg = "Hey what is up", replaceMsg = "Shit man bacon is on sale";
-	Server server;
+	static Server server;
 	Client client;
-	Thread thisThread;
+	static Thread thisThread;
 	
 	
-	@Before
-	public void setUp()
+	@BeforeClass
+	public static void startServer()
 	{
 		server = new Server();
 		thisThread = new Thread(server);
 		thisThread.start();
+	}
+	
+	@Before
+	public void setUp()
+	{
+		
 		client = new Client();
 	}
 	
@@ -124,6 +137,7 @@ public class TestConnection {
 	public void testFetchMessage()
 	{
 		String fetchMsg = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";
+		String error = "<ErrorMsg> Message doesn't exist </ErrorMsg>";
 		
 		try 
 		{
@@ -133,7 +147,7 @@ public class TestConnection {
 			assertEquals(fetchMsg, client.fetchMessage());
 			assertEquals("<FetchedCompleteAck/>", client.fetch_complete_Message());
 			assertEquals("<ErrorMsg> No message to delete </ErrorMsg>", client.fetch_complete_Message());
-			assertNotEquals(fetchMsg, client.fetchMessage());
+			assertEquals(error, client.fetchMessage());
 		} 
 		
 		catch (IOException e) 
@@ -141,28 +155,7 @@ public class TestConnection {
 			e.printStackTrace();
 		}
 	}
-	
-//	@Test
-//	public void testServerFetch2() throws InterruptedException
-//	{
-//		try 
-//		{
-//			client.connect(accountID);
-//			client.addMessage(receiver, testMsg);
-//			client.disconnect();
-//			
-//			client.connect(receiver);
-//			String resp = client.fetchMessage();
-//			System.out.println("WALLAKEBAB from testFetch2: " + resp);
-//			String output = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";
-//			assertEquals(output, resp);
-//		} 
-//		catch (IOException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//	}
-	
+		
 	@Test
 	public void testServerFetch1()
 	{
@@ -237,6 +230,35 @@ public class TestConnection {
 		}
 	}
 	
+	//@Test
+	public void testMultipleFetches() throws Exception
+	{
+		Client [] list = initClients(160);
+		String ID, msg;
+		
+		for (int i = 0; i < list.length; i++)
+		{
+			assertEquals("<Accepted connection from '" + list[i].returnID()  + "' +/>", list[i].returnConn());
+		}
+		
+//		Client [] newList = reconnectClients(list);
+//		for (int i = 0; i < newList.length; i++)
+//		{
+//			assertNotEquals("<Accepted connection from '" + list[i].returnID()  + "' +/>", list[i].returnConn());
+//		}
+		
+		Client [] addList = addMessageClients(list);
+		for (int i = 0; i < addList.length; i++)
+		{
+			ID = parse(msg = list[i].returnMsgID());
+			
+			assertEquals("<Message added: '" + ID  + "' />", msg );
+			//assertNotEquals("<Accepted connection from '" + list[i].returnID()  + "' +/>", list[i].returnConn());
+		}
+		
+		server.stop();
+	}
+	
 	@After
 	public void tearDown() throws IOException
 	{
@@ -246,10 +268,16 @@ public class TestConnection {
 			assertEquals("Client disconnected", client.disconnect());
 		}
 		
-		server.stop();
-		assertTrue(server.isStopped);
+		
 		Kernel.server.clear();
 		
+	}
+	
+	@AfterClass
+	public static void shutdownServer()
+	{
+		server.stop();
+		assertTrue(server.isStopped);
 	}
 	
 	private String parse(String msg)
@@ -260,5 +288,74 @@ public class TestConnection {
 		
 		return idD;
 	}
+	
+//	//@Test
+//	public void testPhone()
+//	{
+//		boolean flag = false;
+//		int number =Integer.parseInt(randomizePhoneNumber());
+//		
+//		if(number < 100000000 || number > 999999999)
+//		{
+//			flag = true;
+//		}
+//	
+//		assertFalse(flag);
+//	}
+	
+	private Client [] initClients(int clients) throws IOException
+	{
+		Client [] clientList = new Client [clients];
+		for(int i = 0; i < clients; i++)
+		{
+			clientList[i] = new Client ();
+			clientList[i].connect(randomizePhoneNumber());
+		}
+		
+		return clientList;
+	}
 
+	private Client [] reconnectClients(Client[] list) throws IOException
+	{
+		
+		for(int i = 0; i < list.length; i++)
+		{
+			
+			list[i].connect(list[i].returnID());
+		}
+		
+		return list;
+	}
+	
+	private Client [] addMessageClients(Client[] list) throws Exception
+	{
+		
+		for(int i = 0; i < list.length; i++)
+		{
+			String message = RandomStringGenerator.generateRandomString(1000, RandomStringGenerator.Mode.ALPHANUMERIC);
+			
+			if(i < list.length - 1)
+			{
+				list[i].addMessage(list[i + 1].returnID(), message );
+			}
+			
+			else
+			{
+				list[i].addMessage(list[0].returnID(), message );
+			}
+			
+		}
+		
+		return list;
+	}
+	
+	private String randomizePhoneNumber()
+	{
+		Random rand = new Random();
+		int max = 999999999; 
+		int min = 100000000;
+		int randomNum = rand.nextInt((max - min) + 1) + min;
+		
+		return "0" + Integer.toString(randomNum);
+	}
 }

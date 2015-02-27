@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 
 
@@ -11,26 +12,24 @@ public class Client
 {
 	
 	int port = 4444;
-	String str;		
+	String str, ID, msgID, request, address = "localhost";		
 	Socket conn = null;
+	
+	
 	
 
 	public String connect(String ID) throws IOException
 	{
-		try 
-		{
-			conn = new Socket (InetAddress.getLocalHost(), 4444);
-		} 
 		
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		} 
+		conn = createSocket(address, port);
+		
+		this.ID = ID;
 		
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 	    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));	 
-			 
-	    out.println("<Request connection  " + ID + " +/>" + "\n");
+	    request = "<Request connection  " + ID + " +/>";
+	    out.println(request);
+	   
 		
 	    while ((str = in.readLine()) != null && !str.isEmpty()) 
 	    {
@@ -40,7 +39,16 @@ public class Client
 
 	    return str;   
 	}	
-		
+	
+	protected Socket createSocket(String address, int port) throws UnknownHostException, IOException 
+	{
+	    return new Socket(address, port);
+	}
+	public String returnRequest()
+	{
+		return request + "\r\n";
+	}
+	
 	public String addMessage(String receiver, String message) throws IOException
 	{		
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
@@ -48,13 +56,13 @@ public class Client
 	    
 	    out.println("<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>");
 	    
-	    while ((str = in.readLine()) != null && !str.isEmpty()) 
+	    while ((msgID = in.readLine()) != null && !msgID.isEmpty()) 
 	    {
-	    	System.out.println("From server: " + str);
+	    	System.out.println("From server: " + msgID);
 		    break;
 		}
 	    
-	    return str;
+	    return msgID;
 	}
 	
 	public String replaceMessage(String msgID, String message) throws IOException
@@ -147,5 +155,20 @@ public class Client
 		}
 		
 	    return str;
+	}
+	
+	public String returnID()
+	{
+		return ID;
+	}
+	
+	public String returnConn()
+	{
+		return str;
+	}
+	
+	public String returnMsgID()
+	{
+		return msgID;
 	}
 }
