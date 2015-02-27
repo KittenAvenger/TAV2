@@ -12,7 +12,7 @@ public class Client
 {
 	
 	int port = 4444;
-	String str, ID, msgID, request, address = "localhost";		
+	String str, ID, msgID, request, address = "localhost", add, delete;		
 	Socket conn = null;
 	
 	
@@ -53,8 +53,8 @@ public class Client
 	{		
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 	    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
-	    
-	    out.println("<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>");
+	    add ="<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+	    out.println(add);
 	    
 	    while ((msgID = in.readLine()) != null && !msgID.isEmpty()) 
 	    {
@@ -63,6 +63,10 @@ public class Client
 		}
 	    
 	    return msgID;
+	}
+	
+	public String returnAddMessage(){
+		return add;
 	}
 	
 	public String replaceMessage(String msgID, String message) throws IOException
@@ -89,7 +93,8 @@ public class Client
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 	    BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
 	    
-	    out.println("<DelMessage> <MsgId \"" + ID + "\" /> </DelMessage>");
+	    delete ="<DelMessage> <MsgId \"" + ID + "\" /> </DelMessage>";
+	    out.println(delete);
 	    
 	    while ((str = in.readLine()) != null && !str.isEmpty()) 
 	    {
@@ -98,6 +103,10 @@ public class Client
 		}
 	
     	return str;
+	}
+	
+	public String retrunDeleteMessage(){
+		return delete;
 	}
 
 	public String fetchMessage() throws IOException
