@@ -52,6 +52,7 @@ public class MockServer {
 	   
 	    verify(socket).getOutputStream();
 	    verify(socket).getInputStream();
+	    verifyNoMoreInteractions(socket);
 	}
 	
 	@Test
@@ -218,7 +219,7 @@ public class MockServer {
 	    verify(socket, atLeast(3)).getInputStream();
 	}
 		
-		private String parse(String msg)
+	private String parse(String msg)
 		{
 			String idD = null;
 			String pattern = "[^\\d]*";
@@ -227,4 +228,49 @@ public class MockServer {
 			return idD;
 		}
 	
+	@Test
+	public void testConnectionException() throws IOException
+	{
+		Client client = mock(Client.class);
+		doThrow(new IOException()).when(client).disconnect();
+		doThrow(new IOException()).when(client).connect("test");
+		doThrow(new IOException()).when(client).addMessage("test", "test");
+		doThrow(new IOException()).when(client).replaceMessage("test", "test");
+		
+		Exception caught = null;
+		try
+		{
+			client.connect("test");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			caught = e;
+		}
+		
+		assertNotNull(caught);
+	}
+
+	@Test
+	public void testServerException()
+	{
+		Server server = spy(new Server());
+		doThrow(new RuntimeException()).when(server).stop();
+		
+		
+		Exception caught = null;
+		try
+		{
+			server.stop();
+		}
+		
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			caught = e;
+		}
+		
+		assertNotNull(caught);
+	}
 }
+

@@ -20,12 +20,7 @@ public class Connection implements Runnable
     }
 
     public synchronized void run() 
-    {
-    	outerloop:
-    		
-    	while (true)
-    	{
-    		
+    {    		
 	        try 
 	        {
 		        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -40,8 +35,7 @@ public class Connection implements Runnable
 					
 			        if (existsID(accountID) == true)
 			        {
-			        	out.println("Connection denied\n");
-			     		break outerloop;		        			      
+			        	out.println("Connection denied\n");			     				        			      
 					}
 			        
 					else 
@@ -58,16 +52,12 @@ public class Connection implements Runnable
 				 		        break;
 				        	}
 				        	 
-				        	if(input.length() == 0)
-				        	{
-				        		 
-				        	}
-				        	 
-				        	else if (input.equals("Disconnect"))
+			        	 
+				        	if (input.equals("Disconnect"))
 				        	{
 				        		out.println("Client disconnected");
 				        		removeID(accountID);
-				        		break outerloop;
+				        		break;
 				        	}
 				        	
 				        	else
@@ -86,7 +76,7 @@ public class Connection implements Runnable
 	        {
 	        	e.printStackTrace();
 	        }
-    	}
+    	
     }
     
     
