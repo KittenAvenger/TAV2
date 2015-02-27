@@ -1,14 +1,16 @@
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -175,7 +177,7 @@ public class MockServer {
 	@Test
 	public void testMockSocketClientFetchMessage() throws IOException  
 	{
-		String ID = "";
+		
 		String result = "1";
 		String example = "<Accepted connection  0702241845 +/>/";
 		String example2 = "<Message added: '" + result + "' />";
@@ -204,7 +206,7 @@ public class MockServer {
 	    when(socket.getOutputStream()).thenReturn(output2);
 	    when(socket.getInputStream()).thenReturn(input2);
 	    
-	    ID = parse(client.addMessage(receiver, message));
+	    
 	    client.connect("0700348273");
 	    String mss= "<Messages> <Sender \"0702241845\" /> <Content \"hey whats up\" /> </Messages>";
 	    String example3 = "<FetchedMessages> " + mss + " </FetchedMessages>";
