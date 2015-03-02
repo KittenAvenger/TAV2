@@ -1,6 +1,9 @@
+package unitTests;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import server.Parser;
 
 
 public class TestParser {

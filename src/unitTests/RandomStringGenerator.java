@@ -1,3 +1,4 @@
+package unitTests;
 
 public class RandomStringGenerator {
 

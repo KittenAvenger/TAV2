@@ -1,3 +1,4 @@
+package server;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -17,6 +18,55 @@ public class Connection implements Runnable
     public Connection (Socket clientSocket) 
     {
         this.clientSocket = clientSocket;   
+    }
+    
+    public void handleRequest()
+    {
+    	PrintWriter out;
+    	BufferedReader in;
+    	
+		try 
+		{
+			out = new PrintWriter(clientSocket.getOutputStream(), true);
+			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			
+			while(true)
+			{			        	
+				while ((input = in.readLine()) != null && !input.isEmpty())  
+				{
+	 		        System.out.println("From client: " + input);
+	 		        break;
+	        	}
+	        	
+				if(input != null)
+				{
+					if (input.equals("Disconnect"))
+		        	{
+		        		out.println("Client disconnected");
+		        		removeID(accountID);
+		        		break;
+		        	}
+		        	
+		        	else
+		        	{
+		        		System.out.println(input);
+		        		clientMsg = parser.parseAllMsg(input);
+		     			handler = new ConnectionHandler(clientMsg, input, sender);
+		     			out.println(handler.handleMessage());			     						        				        				     			      
+		            } 
+				}
+				
+				else break;
+	    	 }
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+    	
     }
 
     public synchronized void run() 
@@ -40,34 +90,10 @@ public class Connection implements Runnable
 			        
 					else 
 					{
-						out.println("<Accepted connection from '" + accountID + "' +/>\n");
+						out.println("<Accepted connection from '" + accountID + "' +/>");
 						addID(accountID);
 						sender = accountID;
-						
-						while(true)
-						{			        	
-							while ((input = in.readLine()) != null && !input.isEmpty())  
-							{
-				 		        System.out.println("From client: " + input);
-				 		        break;
-				        	}
-				        	 
-			        	 
-				        	if (input.equals("Disconnect"))
-				        	{
-				        		out.println("Client disconnected");
-				        		removeID(accountID);
-				        		break;
-				        	}
-				        	
-				        	else
-				        	{
-				        		clientMsg = parser.parseAllMsg(input);
-				     			handler = new ConnectionHandler(clientMsg, input, sender);
-				     			out.println(handler.handleMessage());			     						        				        				     			      
-				            } 
-				        	 
-				        }
+						handleRequest();						
 					}
 			    }    
 	        }

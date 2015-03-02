@@ -1,3 +1,4 @@
+package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +11,7 @@ public class Server implements Runnable
 	int port = 4444;
 	ServerSocket serverSocket = null;
 	boolean isStopped = false;
-	static ArrayList <String> ProcessIDList = new ArrayList<String>();
+	public static ArrayList <String> ProcessIDList = new ArrayList<String>();
 	Socket clientSocket = null;
 
 	private synchronized void start ()
@@ -73,7 +74,7 @@ public class Server implements Runnable
         }
     }
 	
-	private synchronized  boolean isStopped()
+	public synchronized  boolean isStopped()
 	{
 		return isStopped;
 	}

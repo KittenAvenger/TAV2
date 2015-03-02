@@ -1,10 +1,11 @@
+package server;
 import java.util.ArrayList;
 
 
 public class Kernel implements WhatsUpGU {
 	
 	Message text = new Message ();
-	static ArrayList <Message> server = new ArrayList<Message>();
+	public static ArrayList <Message> server = new ArrayList<Message>();
 	static ArrayList <Integer> IDS = new ArrayList<Integer>();
 	
 	

@@ -1,3 +1,4 @@
+package mockTests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.atLeast;
@@ -7,12 +8,18 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import server.Client;
+import server.Kernel;
+import server.Server;
 
 
 public class MockServer {	
@@ -273,6 +280,6 @@ public class MockServer {
 		}
 		
 		assertNotNull(caught);
-	}
+	}		
 }
 

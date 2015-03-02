@@ -1,10 +1,17 @@
+package unitTests;
 import static org.junit.Assert.*;
+
 import java.io.IOException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import server.Client;
+import server.Kernel;
+import server.Server;
 
 
 
@@ -247,7 +254,7 @@ public class TestConnection {
 	public static void shutdownServer()
 	{
 		server.stop();
-		assertTrue(server.isStopped);
+		assertTrue(server.isStopped());
 	}
 	
 	public static String parse(String msg)

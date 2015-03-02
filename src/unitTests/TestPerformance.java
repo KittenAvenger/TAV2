@@ -1,3 +1,4 @@
+package unitTests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -6,6 +7,10 @@ import java.util.Random;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import server.Client;
+import server.ConnectionHandler;
+import server.Server;
 
 
 public class TestPerformance 
@@ -111,7 +116,7 @@ public class TestPerformance
 	public static void stopServer()
 	{
 		server.stop();
-		assertTrue(server.isStopped);
+		assertTrue(server.isStopped());
 	}
 
 	@Test
