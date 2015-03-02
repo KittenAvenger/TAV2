@@ -48,8 +48,7 @@ public class Connection implements Runnable
 		        	}
 		        	
 		        	else
-		        	{
-		        		System.out.println(input);
+		        	{		        		
 		        		clientMsg = parser.parseAllMsg(input);
 		     			handler = new ConnectionHandler(clientMsg, input, sender);
 		     			out.println(handler.handleMessage());			     						        				        				     			      
