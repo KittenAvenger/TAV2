@@ -141,6 +141,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
+	////Sender sends message and try to delete message with correct message id.
 	@Test
 	public void testMockDeleteMessage() throws IOException 
 	{
@@ -172,6 +173,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
+	////Sender sends message and try to delete message with invalid message id.
 	@Test
 	public void testMockDeleteMessage1() throws IOException 
 	{
@@ -203,6 +205,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
+	//Sender sends message and try to replace message with correct message id.
 	@Test
 	public void testMockReplaceMessage() throws IOException 
 	{
@@ -234,6 +237,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
+	//Sender sends a message. And he try to replace message with an invalid message id.
 	@Test
 	public void testMockReplaceMessage1() throws IOException 
 	{
@@ -265,6 +269,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
+	//Client try to fetch messeages, Given that he have some message to fetch.
 	@Test
 	public void testMockFetchMessage() throws IOException 
 	{
@@ -299,6 +304,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
+	//Client try to fetch messeages, Given that he have no message to fetch.
 	@Test
 	public void testMockFetchMessage1() throws IOException 
 	{
@@ -330,6 +336,83 @@ public class MockCoverage
 	    conn2.run();
 	    
 	    assertEquals(output2.toString(),  "<Accepted connection from '0702241847' +/>\r\n" + "<ErrorMsg> Message doesn't exist </ErrorMsg>\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	// Sender send message. Receiver fetch his messages and then perform fetchComplete.
+	@Test
+	public void testMockFetchComplete() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn1 = new Connection(socket);
+		Connection conn2 = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241860";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<Request connection "+receiver+" +/>";
+		String example4 = "<FetchMessages/>";
+		String example5 = "<FetchComplete/>";
+
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+		ByteArrayOutputStream output3 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
+	    ByteArrayInputStream input5 = new ByteArrayInputStream(example5.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn1.run();
+	  
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    conn2.run();
+	    
+	    when(socket.getOutputStream()).thenReturn(output3);
+	    when(socket.getInputStream()).thenReturn(input5);
+	    conn2.handleRequest();
+	    
+	    assertEquals(output3.toString(), "<FetchedCompleteAck/>\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	//Sender send message. Receiver try to perform fetchComplete without fetching messages.
+	@Test
+	public void testMockFetchComplete1() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn1 = new Connection(socket);
+		Connection conn2 = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241860";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<Request connection "+receiver+" +/>";
+		String example4 = "<FetchComplete/>";
+	
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn1.run();
+	  
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    conn2.run();
+	    
+	    assertEquals(output2.toString(), "<Accepted connection from '0702241860' +/>\r\n" + "<ErrorMsg> No message to delete </ErrorMsg>\r\n");
 	    Server.ProcessIDList.clear();
 	}
 	
