@@ -188,7 +188,7 @@ public class TestConnection {
 			client.addMessage(receiver, testMsg);
 			client.disconnect();
 			client.connect("0702241845");
-			String output = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";
+			String output = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages> </FetchedMessages>";			
 			assertEquals(output, client.fetchMessage());
 		} 
 		
@@ -237,7 +237,7 @@ public class TestConnection {
 	
 	
 	@After
-	public void tearDown() throws IOException
+	public synchronized void tearDown() throws IOException
 	{
 		
 		if(client != null)

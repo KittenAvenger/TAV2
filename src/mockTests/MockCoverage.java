@@ -12,9 +12,11 @@ import java.net.Socket;
 
 import static org.mockito.Mockito.times;
 
+import org.junit.After;
 import org.junit.Test;
 
 import server.Connection;
+import server.Kernel;
 import server.Server;
 
 public class MockCoverage 
@@ -117,5 +119,40 @@ public class MockCoverage
 	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<Message added: '1' />\r\n");
 	    Server.ProcessIDList.clear();
 	}
+	
+	@Test
+	public void testMockDeleteMessage() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Socket socket2 = mock(Socket.class);
+		Connection conn = new Connection(socket);
+		Connection conn2 = new Connection(socket2);
+		String ID = "0702241845";
+		String receiver = "0702241845";
+		String message = "gfgf";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<DelMessage> <MsgId \"1\" /> </DelMessage>";
+		//String example4 = "Disconnect";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn.run();
+	    
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3);
+	    conn.handleRequest();
+	    
+	    assertEquals(output2.toString(),  "<Message deleted: \'1\' />\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	
 
 }

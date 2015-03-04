@@ -8,16 +8,20 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import server.Client;
+import server.Connection;
 import server.Kernel;
 import server.Server;
 
@@ -40,8 +44,13 @@ public class MockServer {
 	public void testMockSocketClientConnect() throws IOException  
 	{
 
-		String example = "<Accepted connection  0702241845 +/>/";
+		String ID = "0702241845";
+		String example = "<Accepted connection from '0702241845' +/>";
+		String example2 = "<Request connection  " + ID + " +/>";
 	    final Socket socket = mock(Socket.class);
+	    Socket socket2= mock(Socket.class);
+	    
+	    Connection conn = new Connection(socket2);
 	    
 	    Client client = new Client(){
             @Override
@@ -52,6 +61,8 @@ public class MockServer {
         
 	    ByteArrayOutputStream output = new ByteArrayOutputStream();
 	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
 	    when(socket.getOutputStream()).thenReturn(output);
 	    when(socket.getInputStream()).thenReturn(input);
 	    
@@ -59,6 +70,12 @@ public class MockServer {
 	    
 	  	assertEquals(client.returnRequest(), output.toString());
 	   
+	  	when(socket2.getOutputStream()).thenReturn(output2);
+	  	when(socket2.getInputStream()).thenReturn(input2);
+	  	
+	  	conn.run();
+	  	assertEquals(output2.toString(), example + "\r\n");
+	  	
 	    verify(socket).getOutputStream();
 	    verify(socket).getInputStream();
 	    verifyNoMoreInteractions(socket);
@@ -280,6 +297,31 @@ public class MockServer {
 		}
 		
 		assertNotNull(caught);
-	}		
+	}
+	
+	@After
+	public synchronized void tearDown() throws IOException
+	{
+		Server.ProcessIDList.clear();
+	}
+	
+//	@Test
+//	public void testMockServer() throws IOException
+//	{
+//		final ServerSocket serverSocketmock = mock(ServerSocket.class);
+//		Socket socket = mock(Socket.class);
+//		ByteArrayOutputStream output = new ByteArrayOutputStream();
+//		
+//		Server server = new Server(){
+//			public synchronized void start()
+//			{
+//				System.out.println("Server started");
+//				
+//				serverSocket = serverSocketmock;
+//			}
+//		};
+//		
+//		server.run();
+//	}
 }
 

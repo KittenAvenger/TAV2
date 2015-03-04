@@ -9,12 +9,12 @@ public class Server implements Runnable
 {
 	
 	int port = 4444;
-	ServerSocket serverSocket = null;
+	public ServerSocket serverSocket = null;
 	boolean isStopped = false;
 	public static ArrayList <String> ProcessIDList = new ArrayList<String>();
 	Socket clientSocket = null;
 
-	private synchronized void start ()
+	public synchronized void start ()
 	{
 		System.out.println("Server started");
 		

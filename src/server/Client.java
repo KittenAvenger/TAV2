@@ -109,7 +109,7 @@ public class Client
 		return delete;
 	}
 
-	public String fetchMessage() throws IOException
+	public synchronized String fetchMessage() throws IOException
 	{
 		String msg = "";
 		
@@ -163,6 +163,10 @@ public class Client
 		    break;
 		}
 		
+	   
+//	    in.close();
+//	    out.close();
+//	    conn.close();
 	    return str;
 	}
 	

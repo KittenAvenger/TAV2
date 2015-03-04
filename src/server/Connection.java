@@ -20,15 +20,15 @@ public class Connection implements Runnable
         this.clientSocket = clientSocket;   
     }
     
-    public void handleRequest()
+    public synchronized void handleRequest()
     {
-    	PrintWriter out;
-    	BufferedReader in;
+    	 
+    	
     	
 		try 
 		{
-			out = new PrintWriter(clientSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			
 			while(true)
 			{			        	
@@ -43,7 +43,7 @@ public class Connection implements Runnable
 					if (input.equals("Disconnect"))
 		        	{
 		        		out.println("Client disconnected");
-		        		removeID(accountID);
+		        		removeID(accountID);		        		
 		        		break;
 		        	}
 		        	
@@ -79,12 +79,15 @@ public class Connection implements Runnable
 				{
 					System.out.println("From client: " + input);	
 					
-					accountID = parser.parseRequest(input);					//Parse the account ID of the client, i.e. their telephone number
-					
-					
+					if(input != null)
+					{
+						accountID = parser.parseRequest(input);					//Parse the account ID of the client, i.e. their telephone number
+					}					
+										
 			        if (existsID(accountID) == true)
 			        {
-			        	out.println("Connection denied\n");			     				        			      
+			        	out.println("Connection denied\n");	
+//			        	clientSocket.close();
 					}
 			        
 					else 
