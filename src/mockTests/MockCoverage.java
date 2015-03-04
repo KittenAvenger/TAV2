@@ -100,6 +100,27 @@ public class MockCoverage
 	}
 	
 	@Test
+	public void testMockInvalidMessage() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn = new Connection(socket);
+		String ID = "070224184";
+		String receiver = "070224184";
+		String message = "";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
+	    conn.run();
+	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<ErrorMsg> Reason </ErrorMsg>\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	@Test
 	public void testMockAddMessage() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
@@ -124,16 +145,14 @@ public class MockCoverage
 	public void testMockDeleteMessage() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
-		Socket socket2 = mock(Socket.class);
 		Connection conn = new Connection(socket);
-		Connection conn2 = new Connection(socket2);
+		
 		String ID = "0702241845";
 		String receiver = "0702241845";
-		String message = "gfgf";
+		String message = "Hey what is up";
 		String example = "<Request connection  " + ID + " +/>";
 		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
 		String example3 = "<DelMessage> <MsgId \"1\" /> </DelMessage>";
-		//String example4 = "Disconnect";
 		
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
@@ -144,12 +163,173 @@ public class MockCoverage
 	    when(socket.getOutputStream()).thenReturn(output);
 	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
 	    conn.run();
-	    
+	   
 	    when(socket.getOutputStream()).thenReturn(output2);
 	    when(socket.getInputStream()).thenReturn(input3);
 	    conn.handleRequest();
 	    
 	    assertEquals(output2.toString(),  "<Message deleted: \'1\' />\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	@Test
+	public void testMockDeleteMessage1() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241845";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<DelMessage> <MsgId \"100\" /> </DelMessage>";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn.run();
+	   
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3);
+	    conn.handleRequest();
+	    
+	    assertEquals(output2.toString(),  "<ErrorMsg> Reason </ErrorMsg>\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	@Test
+	public void testMockReplaceMessage() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241845";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<RplMessage> <MsgId \"2\" /> <Content \"Hello\" /> </RplMessage>";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn.run();
+	   
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3);
+	    conn.handleRequest();
+	    
+	    assertEquals(output2.toString(),  "<Message replaced: \'2\' />\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	@Test
+	public void testMockReplaceMessage1() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241845";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<RplMessage> <MsgId \"100\" /> <Content \"Hello\" /> </RplMessage>";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn.run();
+	   
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3);
+	    conn.handleRequest();
+	    
+	    assertEquals(output2.toString(),  "<ErrorMsg> Reason </ErrorMsg>\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	@Test
+	public void testMockFetchMessage() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn1 = new Connection(socket);
+		Connection conn2 = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241850";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<Request connection  " + receiver+ " +/>";
+		String example4 = "<FetchMessages/>";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn1.run();
+	   
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    conn2.run();
+	    String msg = " <Messages>\n <Sender \"0702241845\" />\n <Content \""+message+"\" />\n </Messages>";
+	    assertEquals(output2.toString(),  "<Accepted connection from '" + receiver + "' +/>\r\n" + "<FetchedMessages>\n" + msg + "\n</FetchedMessages>\r\n");
+	    Server.ProcessIDList.clear();
+	}
+	
+	@Test
+	public void testMockFetchMessage1() throws IOException 
+	{
+		Socket socket = mock(Socket.class);
+		Connection conn1 = new Connection(socket);
+		Connection conn2 = new Connection(socket);
+		
+		String ID = "0702241845";
+		String receiver = "0702241846";
+		String message = "Hey what is up";
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
+		String example3 = "<Request connection  0702241847 +/>";
+		String example4 = "<FetchMessages/>";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
+	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    conn1.run();
+	   
+	    when(socket.getOutputStream()).thenReturn(output2);
+	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    conn2.run();
+	    
+	    assertEquals(output2.toString(),  "<Accepted connection from '0702241847' +/>\r\n" + "<ErrorMsg> Message doesn't exist </ErrorMsg>\r\n");
 	    Server.ProcessIDList.clear();
 	}
 	
