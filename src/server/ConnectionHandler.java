@@ -88,13 +88,13 @@ public class ConnectionHandler
 	    			    		
 	    		if(output.equals("Message doesn't exist"))
 	    		{
-	    			return "<ErrorMsg> " + output + " </ErrorMsg>\n";
+	    			return "<ErrorMsg> " + output + " </ErrorMsg>";
 	    			
 	    		}
 	    		
 	    		else
 	    		{
-	    			return "<FetchedMessages>\n" + output + "\n</FetchedMessages>\n";
+	    			return "<FetchedMessages>" + output + "\n</FetchedMessages>";
 	    			
 	    		}
 	    		
