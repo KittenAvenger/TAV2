@@ -100,7 +100,7 @@ public class ConnectionHandler
 	    		
     		
     		
-    		case "FetchComplete":
+    		case "FetchComplete/":
     			
 	    		if(kernel.fetch_complete(accountID) == 1)
 	    		{
