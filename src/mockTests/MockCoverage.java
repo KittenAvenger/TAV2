@@ -1,22 +1,19 @@
 package mockTests;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import static org.mockito.Mockito.times;
-
-import org.junit.After;
 import org.junit.Test;
 
 import server.Connection;
-import server.Kernel;
 import server.Server;
 
 public class MockCoverage 
@@ -31,76 +28,9 @@ public class MockCoverage
 	 * 
 	 */
 
-	@Test
-	public void testMockInvalidReceiver() throws IOException 
-	{
-		Socket socket = mock(Socket.class);							
-		Connection conn = new Connection(socket);
-		String ID = "0702241845";
-		String receiver = "070224184";
-		String message = "Hey what is up";
-		String example = "<Request connection  " + ID + " +/>";
-		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
-		
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
-	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
-	    conn.run();
-	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<ErrorMsg> Reason </ErrorMsg>\r\n");
-	    
-	    Server.ProcessIDList.clear();
-	    
-	    verify(socket, times(2)).getOutputStream();
-	    verify(socket, times(2)).getInputStream();
-	    verifyNoMoreInteractions(socket);
-	}
 	
 	@Test
-	public void testMockInvalidSender() throws IOException 
-	{
-		Socket socket = mock(Socket.class);
-		Connection conn = new Connection(socket);
-		String ID = "070224184";
-		String receiver = "0702241845";
-		String message = "Hey what is up";
-		String example = "<Request connection  " + ID + " +/>";
-		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
-		
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
-	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
-	    conn.run();
-	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<ErrorMsg> Reason </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
-	}
-	
-	@Test
-	public void testMockInvalidSenderAndReceiver() throws IOException 
-	{
-		Socket socket = mock(Socket.class);
-		Connection conn = new Connection(socket);
-		String ID = "070224184";
-		String receiver = "070224184";
-		String message = "Hey what is up";
-		String example = "<Request connection  " + ID + " +/>";
-		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
-		
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
-	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
-	    conn.run();
-	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<ErrorMsg> Reason </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
-	}
-	
-	@Test
-	public void testMockInvalidMessage() throws IOException 
+	public void testMockEmptyAddMessage() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
 		Connection conn = new Connection(socket);
@@ -175,7 +105,7 @@ public class MockCoverage
 	
 	////Sender sends message and try to delete message with invalid message id.
 	@Test
-	public void testMockDeleteMessage1() throws IOException 
+	public void testMockDeleteMessageInvalidMsgID() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
 		Connection conn = new Connection(socket);
@@ -239,7 +169,7 @@ public class MockCoverage
 	
 	//Sender sends a message. And he try to replace message with an invalid message id.
 	@Test
-	public void testMockReplaceMessage1() throws IOException 
+	public void testMockReplaceMessageInvalidMsgID() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
 		Connection conn = new Connection(socket);
@@ -269,7 +199,7 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
-	//Client try to fetch messeages, Given that he have some message to fetch.
+	//Client try to fetch messages, Given that he has some messages to fetch.
 	@Test
 	public void testMockFetchMessage() throws IOException 
 	{
@@ -304,9 +234,9 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
-	//Client try to fetch messeages, Given that he have no message to fetch.
+	//Client try to fetch messages, Given that he have no messages to fetch.
 	@Test
-	public void testMockFetchMessage1() throws IOException 
+	public void testMockFetchNoMessages() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
 		Connection conn1 = new Connection(socket);
@@ -381,9 +311,9 @@ public class MockCoverage
 	    Server.ProcessIDList.clear();
 	}
 	
-	//Sender send message. Receiver try to perform fetchComplete without fetching messages.
+	//Sender sends a message. Receiver tries to perform fetchComplete without fetching messages.
 	@Test
-	public void testMockFetchComplete1() throws IOException 
+	public void testMockFetchCompleteFail() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
 		Connection conn1 = new Connection(socket);

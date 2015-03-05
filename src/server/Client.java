@@ -138,7 +138,7 @@ public class Client
 		PrintWriter out = new PrintWriter(conn.getOutputStream(), true);
 		BufferedReader in = new BufferedReader( new InputStreamReader(conn.getInputStream()));
 
-		out.println("<FetchComplete>");
+		out.println("<FetchComplete/>");
 
 		while ((str = in.readLine()) != null && !str.isEmpty()) 
 	    {
