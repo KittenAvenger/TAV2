@@ -14,28 +14,22 @@ import java.net.Socket;
 import org.junit.Test;
 
 import server.Connection;
+import server.Kernel;
 import server.Server;
 
 public class MockCoverage 
 {
-	/*	First mock a socket and insert it into a Connection object, then initialize all 
-	 * 	the strings needed for the assert method and input stream. 
-	 * 	When the socket gets an input stream it will first mock a request from server 
-	 * 	where it requests a connection. Second time it will get another request for adding a message
-	 * 	from the client. It will send replies to the mocked client, then assert that it actually sent these.
-	 * 	Then the Process ID list is cleared so that the same client can connect again.
-	 * 	Verify that connection object called input and output streams twice each.
-	 * 
-	 */
+	
 
+	//	Mock the socket and add an empty message
 	
 	@Test
-	public void testMockEmptyAddMessage() throws IOException 
+	public void testMockAddMessageInvalidReceiver() throws IOException 
 	{
 		Socket socket = mock(Socket.class);
 		Connection conn = new Connection(socket);
-		String ID = "070224184";
-		String receiver = "070224184";
+		String ID = "0702241845";
+		String receiver = "07022418aa";
 		String message = "";
 		String example = "<Request connection  " + ID + " +/>";
 		String example2 = "<AddMessage> <Receiver \"" + receiver + "\" /> <Content \"" + message + "\" /> </AddMessage>";
@@ -47,15 +41,19 @@ public class MockCoverage
 	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
 	    conn.run();
 	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<ErrorMsg> Reason </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
+	    
 	}
 	
+	//	Mock the socket and add a message
+	
 	@Test
-	public void testMockAddMessage() throws IOException 
+	public void testMockAddMessageInvalidSender() throws IOException 
 	{
+		//testFullMsgList();
 		Socket socket = mock(Socket.class);
 		Connection conn = new Connection(socket);
-		String ID = "0702241845";
+		String ID = "070224184";
 		String receiver = "0702241845";
 		String message = "Hey what is up";
 		String example = "<Request connection  " + ID + " +/>";
@@ -67,8 +65,8 @@ public class MockCoverage
 	    when(socket.getOutputStream()).thenReturn(output);
 	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
 	    conn.run();
-	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<Message added: '1' />\r\n");
-	    Server.ProcessIDList.clear();
+	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "<ErrorMsg> Reason </ErrorMsg>\r\n");
+	    Server.getProcessIDList().clear();
 	}
 	
 	////Sender sends message and try to delete message with correct message id.
@@ -100,7 +98,7 @@ public class MockCoverage
 	    conn.handleRequest();
 	    
 	    assertEquals(output2.toString(),  "<Message deleted: \'1\' />\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	////Sender sends message and try to delete message with invalid message id.
@@ -132,7 +130,7 @@ public class MockCoverage
 	    conn.handleRequest();
 	    
 	    assertEquals(output2.toString(),  "<ErrorMsg> Reason </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	//Sender sends message and try to replace message with correct message id.
@@ -164,7 +162,7 @@ public class MockCoverage
 	    conn.handleRequest();
 	    
 	    assertEquals(output2.toString(),  "<Message replaced: \'2\' />\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	//Sender sends a message. And he try to replace message with an invalid message id.
@@ -196,7 +194,7 @@ public class MockCoverage
 	    conn.handleRequest();
 	    
 	    assertEquals(output2.toString(),  "<ErrorMsg> Reason </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	//Client try to fetch messages, Given that he has some messages to fetch.
@@ -231,7 +229,7 @@ public class MockCoverage
 	    conn2.run();
 	    String msg = " <Messages>\n <Sender \"0702241845\" />\n <Content \""+message+"\" />\n </Messages>";
 	    assertEquals(output2.toString(),  "<Accepted connection from '" + receiver + "' +/>\r\n" + "<FetchedMessages>\n" + msg + "\n</FetchedMessages>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	//Client try to fetch messages, Given that he have no messages to fetch.
@@ -266,7 +264,7 @@ public class MockCoverage
 	    conn2.run();
 	    
 	    assertEquals(output2.toString(),  "<Accepted connection from '0702241847' +/>\r\n" + "<ErrorMsg> Message doesn't exist </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	// Sender send message. Receiver fetch his messages and then perform fetchComplete.
@@ -308,7 +306,7 @@ public class MockCoverage
 	    conn2.handleRequest();
 	    
 	    assertEquals(output3.toString(), "<FetchedCompleteAck/>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
 	//Sender sends a message. Receiver tries to perform fetchComplete without fetching messages.
@@ -343,9 +341,15 @@ public class MockCoverage
 	    conn2.run();
 	    
 	    assertEquals(output2.toString(), "<Accepted connection from '0702241860' +/>\r\n" + "<ErrorMsg> No message to delete </ErrorMsg>\r\n");
-	    Server.ProcessIDList.clear();
+	    Server.getProcessIDList().clear();
 	}
 	
-	
-
+	public void testFullMsgList() 
+	{
+		for(int i = 0; i <= 9999; i++)
+		{
+			Kernel caller = new Kernel();
+			caller.add("Bacon is awesome", "0970956651", "0705565671");		
+		}		
+	}
 }

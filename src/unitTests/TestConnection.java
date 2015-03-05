@@ -18,12 +18,15 @@ import server.Server;
 
 public class TestConnection {
 
+	//	Fields for testing purposes
 
 	String accountID = "1234567890", message, receiver = "0702241845", testMsg = "Hey what is up", replaceMsg = "Shit man bacon is on sale";
 	static Server server;
 	Client client;
 	static Thread thisThread;
 	
+	
+	//	Start a server before any tests are run
 	
 	@BeforeClass
 	public static void startServer()
@@ -33,6 +36,8 @@ public class TestConnection {
 		thisThread.start();
 	}
 	
+	//	Start a new client before every test
+	
 	@Before
 	public void setUp()
 	{
@@ -40,6 +45,7 @@ public class TestConnection {
 		client = new Client();
 	}
 	
+	//	Test that a single client is able to connect to the server
 	
 	@Test
 	public void testSingleConnection() throws InterruptedException 
@@ -57,6 +63,7 @@ public class TestConnection {
 		
 	}
 	
+	//	Test that the same client connects with same accountID after already being connectec once
 	
 	@Test
 	public void testMultipleConnections() throws InterruptedException
@@ -76,6 +83,8 @@ public class TestConnection {
 		    e.printStackTrace();
 		}
 	}
+	
+	//	Test connecting and adding a simple message
 	
 	@Test
 	public void testServerAddMessage() throws InterruptedException 
@@ -99,6 +108,8 @@ public class TestConnection {
 		
 	}
 	
+	//	Test replacing a message the client just added
+	
 	@Test
 	public void testServerReplaceMessage() throws InterruptedException 
 	{
@@ -118,6 +129,8 @@ public class TestConnection {
 		}
 	}
 	
+	//	Test deleting a message the client just added
+	
 	@Test
 	public void testDeleteMessage()
 	{
@@ -136,6 +149,8 @@ public class TestConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	//	Test fetching a message the client just send to himself
 	
 	@Test
 	public void testFetchMessage()
@@ -159,9 +174,11 @@ public class TestConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	//	Test fetching messages when the message list for the client is empty
 		
 	@Test
-	public void testServerFetch1()
+	public void testServerFetchNoMessages()
 	{
 			
 		try 
@@ -177,6 +194,8 @@ public class TestConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	//	Test adding a message, then another client connects and fetches this message
 	
 	@Test
 	public void testServerFetch2()
@@ -198,8 +217,10 @@ public class TestConnection {
 		}
 	}
 	
+	//	Try to fetch complete after the messages have been deleted
+	
 	@Test
-	public void testServerFetch_complete1()
+	public void testServerFetchCompleteNoMessages()
 	{
 			
 		try 
@@ -214,8 +235,10 @@ public class TestConnection {
 		}
 	}
 	
+	//	Try to fetch complete existing messages
+	
 	@Test
-	public void testServerFetch_complete2()
+	public void testServerFetchComplete()
 	{
 			
 		try 
@@ -235,6 +258,7 @@ public class TestConnection {
 	}
 	
 	
+	//	Disconnects the client after every test and clears the message database
 	
 	@After
 	public synchronized void tearDown() throws IOException
@@ -244,12 +268,16 @@ public class TestConnection {
 		Kernel.server.clear();		
 	}
 	
+	//	Stops the server and asserts that it is shut down
+	
 	@AfterClass
 	public static void shutdownServer()
 	{
 		server.stop();
 		assertTrue(server.isStopped());
 	}
+	
+	//	Parse message ID from the addMessage function
 	
 	public static String parse(String msg)
 	{

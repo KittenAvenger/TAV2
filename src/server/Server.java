@@ -8,13 +8,19 @@ import java.util.ArrayList;
 public class Server implements Runnable 
 {
 	
-	int port = 4444;
-	public ServerSocket serverSocket = null;
-	boolean isStopped = false;
-	public static ArrayList <String> ProcessIDList = new ArrayList<String>();
+	/*	Fields for initializing the server, ProcessIDList saves the
+	 * 	accountID for every client to keep track of who is already connected
+	 */
+	
+	private int port = 4444;
+	private ServerSocket serverSocket = null;
+	private boolean isStopped = false;
+	private static ArrayList <String> ProcessIDList = new ArrayList<String>();
 	Socket clientSocket = null;
+	
+	//	Creates a server socket to listen on port 4444
 
-	public synchronized void start ()
+	private synchronized void start ()
 	{
 		System.out.println("Server started");
 		
@@ -28,6 +34,10 @@ public class Server implements Runnable
 			e.printStackTrace();
 		}
 	}
+	
+	/*	Initiates the server socket and goes into a loop to listen to incoming client requests. 
+	 * 	Creates a new thread for every client and passes the clients socket into the Connection object.
+	 */
 	
 	public synchronized void run() 
 	{
@@ -57,6 +67,8 @@ public class Server implements Runnable
         
     }
 		
+	//	Stops server and sets flag to true
+	
 	public void stop()
 	{
         this.isStopped = true;
@@ -78,4 +90,11 @@ public class Server implements Runnable
 	{
 		return isStopped;
 	}
+
+	//	Getter for ProcessIDList
+	
+	public static ArrayList <String> getProcessIDList() {
+		return ProcessIDList;
+	}
+	
 }

@@ -14,7 +14,7 @@ public class Kernel implements WhatsUpGU {
 			
 	}
 	
-	// test
+	//	Returns a message object for testing purposes
 	public Message returnMessage (){
 		
 		return text;
@@ -49,7 +49,7 @@ public class Kernel implements WhatsUpGU {
 			ID = IDS.size() + 1;
 			
 			
-			if(IDS.size()> 10000)
+			if(IDS.size() >= 10000)
 			{
 				return -1;
 				
@@ -87,6 +87,11 @@ public class Kernel implements WhatsUpGU {
 		
 	}
 
+	/*	Takes a message ID and a message as arguments, if the message is not empty it tries to find the corresponding
+	 * 	message based on the ID given. If message was found and successfully replaced it returns the message ID.
+	 * 	Otherwise returns a -1.
+	 */
+	
 	public int replace(int ID, String message) {
 	if(IsNotEmpty(message)){
 		for(int i = 0; i < server.size(); i++) {
@@ -103,6 +108,11 @@ public class Kernel implements WhatsUpGU {
 	}
 	}
 
+	/*	Fetches all messages and takes the receiver as an argument. If the messages haven't been fetched previously and contains
+	 * 	the receivers phone number it returns a string in xml format. For every message it increments the count variable.
+	 * 	If the count variable is not equal to 0 it returns the entire message string, otherwise returns an error message.
+	 */
+	
 	public String fetch(String receiver) {
 		
 		String message = "";
@@ -130,6 +140,10 @@ public class Kernel implements WhatsUpGU {
 		}	
 	}
 	
+	/*	Takes the receiver as an argument. If the messages include the receiver's phone number and have been fetched they are deleted
+	 * 	from the server. Every message increments the count variable by 1. If count doesn't equal 0 it returns a 1 for successsful
+	 * 	fetch completion. Otherwise returns -1.
+	 */
 	
 	public int fetch_complete(String receiver) {
 		

@@ -6,7 +6,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
+/*	Client class used to request connections and communicate with the server
+ * 	All return messages were used in initial mocking tests to assert outputs.
+ * 
+ */
 
 public class Client 
 {
@@ -16,7 +19,7 @@ public class Client
 	Socket conn = null;
 	
 	
-	
+	//	Sends a request to server to connect
 
 	public String connect(String ID) throws IOException
 	{
@@ -40,14 +43,19 @@ public class Client
 	    return str;   
 	}	
 	
+	//	Creates a new socket with the specified inet address and port
+	
 	protected Socket createSocket(String address, int port) throws UnknownHostException, IOException 
 	{
 	    return new Socket(address, port);
 	}
+	
 	public String returnRequest()
 	{
 		return request + "\r\n";
 	}
+	
+	//	Sends a request to add a message
 	
 	public String addMessage(String receiver, String message) throws IOException
 	{		
@@ -69,6 +77,8 @@ public class Client
 		return add;
 	}
 	
+	//	Sends a request to replace an existing message
+	
 	public String replaceMessage(String msgID, String message) throws IOException
 	{
 		
@@ -87,6 +97,8 @@ public class Client
 	}
 
 
+	//	Sends a request to delete a message
+	
 	public String deleteMessage(String ID) throws IOException
 	{
 	
@@ -109,6 +121,8 @@ public class Client
 		return delete;
 	}
 
+	//	Sends a request to fetch a message
+	
 	public synchronized String fetchMessage() throws IOException
 	{
 		String msg = "";
@@ -132,6 +146,8 @@ public class Client
     	return msg;
 	}
 
+	//	Sends a request to perform a fetch complete
+	
 	public String fetch_complete_Message() throws IOException
 	{
 
@@ -149,6 +165,8 @@ public class Client
 		return str;
 	}
 
+	//	Sends a request to disconnect from the server
+	
 	public String disconnect() throws IOException
 	{
 	
@@ -163,10 +181,6 @@ public class Client
 		    break;
 		}
 		
-	   
-//	    in.close();
-//	    out.close();
-//	    conn.close();
 	    return str;
 	}
 	

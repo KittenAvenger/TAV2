@@ -1,5 +1,9 @@
 package server;
 
+/*	Class for parsing the client and server streams
+ * 
+ */
+
 public class Parser 
 {
 	public String parseRequest(String message) 
@@ -26,14 +30,7 @@ public class Parser
 		return tokens[1];
 	}
 	
-	public String parseDelete(String message)
-	{
-		
-		String pattern = "[\"]";
-		String[] tokens = message.split(pattern);
 	
-		return tokens[1];
-	}
 	
 	public String parseReplace(String message)
 	{
@@ -43,13 +40,7 @@ public class Parser
 		return tokens[3];
 	}
 	
-	public String parseFetchMessage(String message)
-	{
-		String pattern = "[\"]";
-		String[] tokens = message.split(pattern);
-		
-		return tokens[3];
-	}
+	
 	
 	public String parseAllMsg(String msg)
     {

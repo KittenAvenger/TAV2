@@ -7,12 +7,23 @@ public class ConnectionHandler
 	Kernel kernel = new Kernel();
 	int result = 0;
 	
+	/*	The clientMsg string has been previously parsed to a format that matches one of the case statements,
+	 * 	the input is the unparsed message from a client, normally containing sender, receiver and message data
+	 * 	the accountID string is for the addMessage function.
+	 * 
+	 */
+	
 	public ConnectionHandler(String clientMsg, String input, String accountID)
 	{
 		this.clientMsg = clientMsg;
 		this.input = input;
 		this.accountID = accountID;
 	}
+	
+	/*	The cases can either be adding a message, replacing it, deleting it, fetching it and to do a fetch complete.
+	 * 	The default case is if the xml format doesn't match any of the above and returns a string "Message didn't match"
+	 * 	Every case except the default one either returns a successful result or an error.
+	 */
 	
 	public String handleMessage()
 	{
