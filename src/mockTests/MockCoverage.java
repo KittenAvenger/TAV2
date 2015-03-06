@@ -225,9 +225,10 @@ public class MockCoverage
 	@Test
 	public void testMockFetchMessage() throws IOException 
 	{
-		Socket socket = mock(Socket.class);
-		Connection conn1 = new Connection(socket);
-		Connection conn2 = new Connection(socket);
+		Socket socket1 = mock(Socket.class);
+		Socket socket2 = mock(Socket.class);
+		Connection conn1 = new Connection(socket1);
+		Connection conn2 = new Connection(socket2);
 		
 		String ID = "0702241845";
 		String receiver = "0702241850";
@@ -244,12 +245,12 @@ public class MockCoverage
 	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
 	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
 	    
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    when(socket1.getOutputStream()).thenReturn(output);
+	    when(socket1.getInputStream()).thenReturn(input).thenReturn(input2);
 	    conn1.run();
 	   
-	    when(socket.getOutputStream()).thenReturn(output2);
-	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    when(socket2.getOutputStream()).thenReturn(output2);
+	    when(socket2.getInputStream()).thenReturn(input3).thenReturn(input4);
 	    conn2.run();
 	    String msg = " <Messages>\n <Sender \"0702241845\" />\n <Content \""+message+"\" />\n </Messages>";
 	    assertEquals(output2.toString(),  "<Accepted connection from '" + receiver + "' +/>\r\n" + "<FetchedMessages>\n" + msg + "\n</FetchedMessages>\r\n");
@@ -261,9 +262,10 @@ public class MockCoverage
 	@Test
 	public void testMockFetchNoMessages() throws IOException 
 	{
-		Socket socket = mock(Socket.class);
-		Connection conn1 = new Connection(socket);
-		Connection conn2 = new Connection(socket);
+		Socket socket1 = mock(Socket.class);
+		Socket socket2 = mock(Socket.class);
+		Connection conn1 = new Connection(socket1);
+		Connection conn2 = new Connection(socket2);
 		
 		String ID = "0702241845";
 		String receiver = "0702241846";
@@ -280,12 +282,12 @@ public class MockCoverage
 	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
 	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
 	    
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    when(socket1.getOutputStream()).thenReturn(output);
+	    when(socket1.getInputStream()).thenReturn(input).thenReturn(input2);
 	    conn1.run();
 	   
-	    when(socket.getOutputStream()).thenReturn(output2);
-	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    when(socket2.getOutputStream()).thenReturn(output2);
+	    when(socket2.getInputStream()).thenReturn(input3).thenReturn(input4);
 	    conn2.run();
 	    
 	    assertEquals(output2.toString(),  "<Accepted connection from '0702241847' +/>\r\n" + "<ErrorMsg> Message doesn't exist </ErrorMsg>\r\n");
@@ -297,9 +299,10 @@ public class MockCoverage
 	@Test
 	public void testMockFetchComplete() throws IOException 
 	{
-		Socket socket = mock(Socket.class);
-		Connection conn1 = new Connection(socket);
-		Connection conn2 = new Connection(socket);
+		Socket socket1 = mock(Socket.class);
+		Socket socket2 = mock(Socket.class);
+		Connection conn1 = new Connection(socket1);
+		Connection conn2 = new Connection(socket2);
 		
 		String ID = "0702241845";
 		String receiver = "0702241860";
@@ -319,30 +322,31 @@ public class MockCoverage
 	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
 	    ByteArrayInputStream input5 = new ByteArrayInputStream(example5.getBytes());
 	    
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    when(socket1.getOutputStream()).thenReturn(output);
+	    when(socket1.getInputStream()).thenReturn(input).thenReturn(input2);
 	    conn1.run();
 	  
-	    when(socket.getOutputStream()).thenReturn(output2);
-	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    when(socket2.getOutputStream()).thenReturn(output2);
+	    when(socket2.getInputStream()).thenReturn(input3).thenReturn(input4);
 	    conn2.run();
 	    
-	    when(socket.getOutputStream()).thenReturn(output3);
-	    when(socket.getInputStream()).thenReturn(input5);
+	    when(socket2.getOutputStream()).thenReturn(output3);
+	    when(socket2.getInputStream()).thenReturn(input5);
 	    conn2.handleRequest();
 	    
 	    assertEquals(output3.toString(), "<FetchedCompleteAck/>\r\n");
 	    Server.getProcessIDList().clear();
 	}
-	
+
 	//Sender sends a message. Receiver tries to perform fetchComplete without fetching messages.
 	
 	@Test
 	public void testMockFetchCompleteFail() throws IOException 
 	{
-		Socket socket = mock(Socket.class);
-		Connection conn1 = new Connection(socket);
-		Connection conn2 = new Connection(socket);
+		Socket socket1 = mock(Socket.class);
+		Socket socket2 = mock(Socket.class);
+		Connection conn1 = new Connection(socket1);
+		Connection conn2 = new Connection(socket2);
 		
 		String ID = "0702241845";
 		String receiver = "0702241860";
@@ -359,13 +363,13 @@ public class MockCoverage
 	    ByteArrayInputStream input3 = new ByteArrayInputStream(example3.getBytes());
 	    ByteArrayInputStream input4 = new ByteArrayInputStream(example4.getBytes());
 	    
-	    when(socket.getOutputStream()).thenReturn(output);
-	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);
+	    when(socket1.getOutputStream()).thenReturn(output);
+	    when(socket1.getInputStream()).thenReturn(input).thenReturn(input2);
 	    conn1.run();
 	  
-	    when(socket.getOutputStream()).thenReturn(output2);
-	    when(socket.getInputStream()).thenReturn(input3).thenReturn(input4);
-	    conn2.run();
+	    when(socket2.getOutputStream()).thenReturn(output2);
+	    when(socket2.getInputStream()).thenReturn(input3).thenReturn(input4);
+	    conn2.run();  
 	    
 	    assertEquals(output2.toString(), "<Accepted connection from '0702241860' +/>\r\n" + "<ErrorMsg> No message to delete </ErrorMsg>\r\n");
 	    Server.getProcessIDList().clear();
