@@ -86,6 +86,10 @@ public class Server implements Runnable
         }
     }
 	
+	/*	Flag for checking if the server has stopped
+	 * 
+	 */
+	
 	public synchronized  boolean isStopped()
 	{
 		return isStopped;

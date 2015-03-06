@@ -64,6 +64,8 @@ public class MockCoverage
 	    Server.getProcessIDList().clear();
 	}
 	
+	//	Mocks socket and tries to connect and disconnect one client
+	
 	@Test
 	public void testMockClientDisconnect() throws IOException 
 	{		

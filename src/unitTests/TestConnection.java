@@ -153,7 +153,7 @@ public class TestConnection {
 	//	Test fetching a message the client just sent to himself
 	
 	@Test
-	public void testFetchMessage()
+	public void testFetchMessageSameClient()
 	{
 		String fetchMsg = "<FetchedMessages> <Messages> <Sender \"1234567890\" /> <Content \"Hey what is up\" /> </Messages></FetchedMessages>";
 		String error = "<ErrorMsg> Message doesn't exist </ErrorMsg>";
@@ -198,7 +198,7 @@ public class TestConnection {
 	//	Test adding a message, then another client connects and fetches this message
 	
 	@Test
-	public void testServerFetch2()
+	public void testFetchMessageDifferentClients()
 	{
 			
 		try 
