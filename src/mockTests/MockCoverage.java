@@ -1,9 +1,6 @@
 package mockTests;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
@@ -14,7 +11,6 @@ import java.net.Socket;
 import org.junit.Test;
 
 import server.Connection;
-import server.Kernel;
 import server.Server;
 
 public class MockCoverage 
@@ -49,8 +45,7 @@ public class MockCoverage
 	
 	@Test
 	public void testMockAddMessageInvalidSender() throws IOException 
-	{
-		//testFullMsgList();
+	{		
 		Socket socket = mock(Socket.class);
 		Connection conn = new Connection(socket);
 		String ID = "070224184";
@@ -69,7 +64,30 @@ public class MockCoverage
 	    Server.getProcessIDList().clear();
 	}
 	
+	@Test
+	public void testMockClientDisconnect() throws IOException 
+	{		
+		Socket socket = mock(Socket.class);
+		Connection conn = new Connection(socket);
+		String ID = "0702241845";		
+		String example = "<Request connection  " + ID + " +/>";
+		String example2 = "Disconnect";
+		
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+	    ByteArrayInputStream input = new ByteArrayInputStream(example.getBytes());
+	    ByteArrayInputStream input2 = new ByteArrayInputStream(example2.getBytes());
+	    
+	    when(socket.getOutputStream()).thenReturn(output);
+	    when(socket.getInputStream()).thenReturn(input).thenReturn(input2);	 
+	    
+	    conn.run();
+	    
+	    assertEquals(output.toString(), "<Accepted connection from '" + ID + "' +/>\r\n" + "Client disconnected\r\n");
+	    Server.getProcessIDList().clear();
+	}
+	
 	////Sender sends message and try to delete message with correct message id.
+	
 	@Test
 	public void testMockDeleteMessage() throws IOException 
 	{
@@ -102,6 +120,7 @@ public class MockCoverage
 	}
 	
 	////Sender sends message and try to delete message with invalid message id.
+	
 	@Test
 	public void testMockDeleteMessageInvalidMsgID() throws IOException 
 	{
@@ -134,6 +153,7 @@ public class MockCoverage
 	}
 	
 	//Sender sends message and try to replace message with correct message id.
+	
 	@Test
 	public void testMockReplaceMessage() throws IOException 
 	{
@@ -166,6 +186,7 @@ public class MockCoverage
 	}
 	
 	//Sender sends a message. And he try to replace message with an invalid message id.
+	
 	@Test
 	public void testMockReplaceMessageInvalidMsgID() throws IOException 
 	{
@@ -198,6 +219,7 @@ public class MockCoverage
 	}
 	
 	//Client try to fetch messages, Given that he has some messages to fetch.
+	
 	@Test
 	public void testMockFetchMessage() throws IOException 
 	{
@@ -233,6 +255,7 @@ public class MockCoverage
 	}
 	
 	//Client try to fetch messages, Given that he have no messages to fetch.
+	
 	@Test
 	public void testMockFetchNoMessages() throws IOException 
 	{
@@ -268,6 +291,7 @@ public class MockCoverage
 	}
 	
 	// Sender send message. Receiver fetch his messages and then perform fetchComplete.
+	
 	@Test
 	public void testMockFetchComplete() throws IOException 
 	{
@@ -310,6 +334,7 @@ public class MockCoverage
 	}
 	
 	//Sender sends a message. Receiver tries to perform fetchComplete without fetching messages.
+	
 	@Test
 	public void testMockFetchCompleteFail() throws IOException 
 	{
@@ -342,14 +367,5 @@ public class MockCoverage
 	    
 	    assertEquals(output2.toString(), "<Accepted connection from '0702241860' +/>\r\n" + "<ErrorMsg> No message to delete </ErrorMsg>\r\n");
 	    Server.getProcessIDList().clear();
-	}
-	
-	public void testFullMsgList() 
-	{
-		for(int i = 0; i <= 9999; i++)
-		{
-			Kernel caller = new Kernel();
-			caller.add("Bacon is awesome", "0970956651", "0705565671");		
-		}		
-	}
+	}	
 }
