@@ -63,7 +63,7 @@ public class TestConnection {
 		
 	}
 	
-	//	Test that the same client connects with same accountID after already being connectec once
+	//	Test that a client can't connect more than once to the server
 	
 	@Test
 	public void testMultipleConnections() throws InterruptedException
@@ -150,7 +150,7 @@ public class TestConnection {
 		}
 	}
 	
-	//	Test fetching a message the client just send to himself
+	//	Test fetching a message the client just sent to himself
 	
 	@Test
 	public void testFetchMessage()
