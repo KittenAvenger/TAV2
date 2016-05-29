@@ -1,7 +1,5 @@
 package mockTests;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +10,8 @@ import org.junit.Test;
 
 import server.Connection;
 import server.Server;
+
+import static org.mockito.Mockito.*;
 
 public class MockCoverage 
 {
